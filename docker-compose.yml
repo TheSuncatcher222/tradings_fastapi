@@ -1,0 +1,54 @@
+version: '3.8'
+
+volumes:
+  tradings_fastapi_database_volume:
+
+services:
+
+  tradings_fastapi_redis:
+    image: redis:7.2.1-alpine
+    restart: on-failure
+
+  tradings_fastapi_pg_database:
+    env_file:
+      - app/.env
+    image: postgres:12-alpine    
+    restart: on-failure
+    volumes:
+      - tradings_fastapi_database_volume:/var/lib/postgresql/data/
+
+  tradings_fastapi_pg_admin:
+    depends_on:
+      - tradings_fastapi_pg_database
+    env_file:
+      - app/.env
+    image: dpage/pgadmin4
+    ports:
+      - "5050:80"
+    restart: on-failure
+
+  tradings_fastapi_backend:
+    build:
+      context: app
+      dockerfile: Dockerfile
+    command: sh -c "
+      dos2unix run_fastapi.sh &&
+      ./run_fastapi.sh"
+    depends_on:
+      - tradings_fastapi_redis
+      - tradings_fastapi_pg_database
+    env_file:
+      - app/.env
+    volumes:
+      - ./app:/app
+    restart: on-failure
+
+  tradings_fastapi_gateway:
+    depends_on:
+      - tradings_fastapi_backend
+    image: nginx:1.21.3-alpine
+    ports:
+      - "8000:80"
+    restart: on-failure
+    volumes:
+      - ./gateway/nginx.conf:/etc/nginx/conf.d/default.conf
