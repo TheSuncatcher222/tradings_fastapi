@@ -1,10 +1,18 @@
 Пользователь (User):
 ____________________________
 user_id (Primary Key)
-username
-password_hash (хешированный пароль)
-email
-user_type (обычный пользователь или администратор)
+account_balance
+name_first
+name_last
+password_hash
+email_is_verified
+is_admin
+is_active
+phone
+phone_is_verified
+reg_date
+telegram_username
+telegram_is_verified
 
 
 Товар (Product):
@@ -48,6 +56,7 @@ user_id (Foreign Key, связь с таблицей пользователей)
 card_number
 expiration_date
 cvv
+
 
 Отзывы и Рейтинги (Review):
 ____________________________
@@ -130,6 +139,18 @@ user_id (Foreign Key, связь с таблицей пользователей)
 subject (тема обращения)
 description (описание проблемы)
 status (статус запроса, например, "в обработке", "решено")
+
+
+Форма отзыва на сайте (Feedback):
+____________________________
+contacts
+data_process_approve
+email
+id
+is_accepted
+message
+name
+reg_date
 
 
 Функциональности для администраторов (AdminFunctionality):
