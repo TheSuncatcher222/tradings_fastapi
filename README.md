@@ -1,1 +1,1 @@
-# stepik_fastapi
+# tradings fastapi
