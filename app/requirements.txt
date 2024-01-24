@@ -13,7 +13,6 @@ click-repl==0.3.0
 colorama==0.4.6
 colorlog==6.8.0
 cryptography==42.0.0
-databases==0.8.0
 dnspython==2.5.0
 ecdsa==0.18.0
 email-validator==2.1.0.post1
