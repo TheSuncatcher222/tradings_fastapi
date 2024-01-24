@@ -1,0 +1,123 @@
+# Client powered by
+#   Name: REST Client
+#   Id: humao.rest-client
+#   Description: REST Client for Visual Studio Code
+#   Version: 0.25.1
+#   Publisher: Huachao Mao
+#   VS Marketplace Link: https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+
+
+##########################################################################
+################################# TOKENS #################################
+##########################################################################
+
+
+@token_access = jwt_token_access
+
+@token_refresh = jwt_token_refresh
+
+
+##########################################################################
+################################ EDPOINTS ################################
+##########################################################################
+
+
+@auth = http://127.0.0.1:8000/api/auth
+
+@feedbacks = http://127.0.0.1:8000/api/feedbacks
+
+@docs = http://127.0.0.1:8000/api/docs
+
+@users = http://127.0.0.1:8000/api/users
+
+
+##########################################################################
+################################## AUTH ##################################
+##########################################################################
+
+
+###
+POST {{auth}}/register/ HTTP/1.1
+Accept-Language: en-US,en;q=0.8
+Accept-Language: ru-RU
+Content-Type: application/json
+User-Agent: custom_vscode-restclient
+
+{
+    "name_first": "Иван",
+    "name_last": "Иванов",
+    "email": "iVan@email.com",
+    "phone": "+79111868216",
+    "password": "12345aA!",
+    "telegram_username": "iVan_777"
+}
+
+###
+POST {{auth}}/login/ HTTP/1.1
+Accept-Language: en-US,en;q=0.8
+Accept-Language: ru-RU
+Content-Type: application/json
+User-Agent: custom_vscode-restclient
+
+{
+    "email": "iVan@email.com",
+    "password": "12345aA!"
+}
+
+
+###
+POST {{auth}}/refresh/ HTTP/1.1
+Accept-Language: en-US,en;q=0.8
+Accept-Language: ru-RU
+Content-Type: application/json
+User-Agent: custom_vscode-restclient
+
+{
+    "refresh": "jwt_token_refresh"
+}
+
+
+##########################################################################
+################################## DOCS ##################################
+##########################################################################
+
+
+###
+GET {{docs}}/swagger HTTP/1.1
+Accept-Language: en-US,en;q=0.8
+Accept-Language: ru-RU
+User-Agent: custom_vscode-restclient
+
+
+##########################################################################
+################################ FEEDBACKS ###############################
+##########################################################################
+
+
+###
+POST {{feedbacks}}/send HTTP/1.1
+Accept-Language: en-US,en;q=0.8
+Accept-Language: ru-RU
+Content-Type: application/json
+User-Agent: custom_vscode-restclient
+
+{
+    "name": "Иван Иванов",
+    "email": "iVan@email.com",
+    "contacts": "+7 999 111 22 33",
+    "message": "Вы классные!",
+    "data_process_approve": "True"
+}
+
+
+##########################################################################
+################################# USERS ##################################
+##########################################################################
+
+
+###
+GET {{users}}/me HTTP/1.1
+Accept-Language: en-US,en;q=0.8
+Accept-Language: ru-RU
+Authorization: Bearer jwt_token_access
+User-Agent: custom_vscode-restclient
