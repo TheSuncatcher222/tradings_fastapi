@@ -2,20 +2,15 @@
 Модуль с задачами для Celery в приложении "feedback".
 """
 
-from email.message import EmailMessage
-import smtplib
-
 from sqlalchemy.engine.result import ChunkedIteratorResult
 from sqlalchemy.sql import select, update
 from sqlalchemy.sql.selectable import Select
 
 from src.feedback.models import Feedback
 from src.celery_app import celery_app
-from src.config import (
-    SMTP_HOST, SMTP_PASSWORD, SMTP_PORT, SMTP_USER, SUPPORT_EMAIL_TO,
-    USE_SSL, USE_TSL,
-)
+from src.config import SUPPORT_EMAIL_TO
 from src.database import sync_session_maker
+from src.user.utils import send_mail
 
 
 @celery_app.task
@@ -25,11 +20,7 @@ def send_feedback_to_mail(feedback_data: dict) -> None:
 
     Устанавливает объекту Feedback статус отправленного.
     """
-    email: EmailMessage = EmailMessage()
-    email['Subject'] = f'Сообщение из формы обратной связи от {feedback_data["email"]}'
-    email['From'] = SMTP_USER
-    email['To'] = SUPPORT_EMAIL_TO
-    email.set_content(
+    content: str = (
         f'Зарегистрировано новое обращение №{feedback_data["id"]} '
         f'от {feedback_data["reg_date"]}.'
         '\n\n'
@@ -41,17 +32,9 @@ def send_feedback_to_mail(feedback_data: dict) -> None:
         '\n\n'
         f'Сообщение: {feedback_data["message"]}'
     )
+    subject: str = f'Сообщение из формы обратной связи от {feedback_data["email"]}'
 
-    if USE_SSL:
-        with smtplib.SMTP_SSL(host=SMTP_HOST, port=SMTP_PORT) as smtp:
-            smtp.login(user=SMTP_USER, password=SMTP_PASSWORD)
-            smtp.send_message(email)
-    else:
-        with smtplib.SMTP_SSL(host=SMTP_HOST, port=SMTP_PORT) as smtp:
-            if USE_TSL:
-                smtp.starttls()
-            smtp.login(user=SMTP_USER, password=SMTP_PASSWORD)
-            smtp.send_message(email)
+    send_mail(subject=subject, to=SUPPORT_EMAIL_TO, content=content)
 
     with sync_session_maker() as session:
         update_stmt = update(
