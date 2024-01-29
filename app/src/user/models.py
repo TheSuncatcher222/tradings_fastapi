@@ -36,7 +36,7 @@ class User(Base):
         comment='остаток средств на балансе',
         server_default='0'
     )
-    # INFO: подтверждается автоматически.
+    # INFO: нужно подтверждение.
     email: Mapped[str] = mapped_column(
         String(length=USER_EMAIL_LEN),
         comment='email',
@@ -74,24 +74,17 @@ class User(Base):
         comment='номер телефона',
         nullable=True,
     )
-    phone_is_verified: Mapped[bool] = mapped_column(
-        comment='статус подтвержденного номера телефона',
-        default=False,
-    )
     reg_date: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         comment='дата и время регистрации',
         server_default=func.now(),
     )
+    # INFO: нужно подтверждение.
     telegram_username: Mapped[str] = mapped_column(
         String(length=USER_TELEGRAM_LEN),
         comment='telegram профиль',
         nullable=True,
     )
-    telegram_is_verified: Mapped[bool] = mapped_column(
-        comment='статус подтвержденного telegram профиля',
-        default=False,
-    )
 
     def __str__(self) -> str:
-        return f'{self.email} ({self.name_first} {self.name_last})'
+        return self.email

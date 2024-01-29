@@ -1,5 +1,5 @@
 """
-Модуль с эндпоинтами приложения "auth".
+Модуль с эндпоинтами приложения "user".
 """
 
 from fastapi import APIRouter, Depends
@@ -10,8 +10,8 @@ from sqlalchemy.sql.selectable import Select
 
 from src.auth.utils import get_current_user_id
 from src.database import AsyncSession, get_async_session
-from src.users.models import User
-from src.users.schemas import UserRepresent
+from src.user.models import User
+from src.user.schemas import UserRepresent
 
 router_users: APIRouter = APIRouter(
     prefix='/users',
