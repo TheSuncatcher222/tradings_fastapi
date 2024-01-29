@@ -9,6 +9,7 @@ from typing import Annotated
 from fastapi import Depends, status
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer
+from itsdangerous import URLSafeTimedSerializer, BadSignature
 from jose import jwt
 from jose.exceptions import ExpiredSignatureError, JWTClaimsError, JWTError
 
@@ -17,10 +18,29 @@ from src.config import (
     JSON_ERR_CREDENTIALS_INVALID_EXPIRED, JSON_ERR_CREDENTIALS_TYPE,
     JWT_ACCESS_EXPIRATION_SEC, JWT_REFRESH_EXPIRATION_SEC,
     JWT_TYPE_ACCESS, JWT_TYPE_REFRESH,
-    PASS_ENCODE, SALT, SECRET_KEY, ITERATIONS,
+    ONE_DAY_SEC, PASS_ENCODE, SALT, SECRET_KEY, ITERATIONS,
 )
 
 oauth2_scheme: OAuth2PasswordBearer = OAuth2PasswordBearer(tokenUrl='auth/login')
+
+
+def dangerous_token_generate(data: dict[str, any]) -> str:
+    """Генерирует уникальный токен, содержащий данные из параметров функции."""
+    serializer: URLSafeTimedSerializer = _get_dangerous_serializer()
+    return serializer.dumps(obj=data)
+
+
+def dangerous_token_verify(token, expiration: int = ONE_DAY_SEC) -> any:
+    """
+    Верифицирует и возвращает данные из уникального токена.
+
+    Если токен невалидный - возвращает None.
+    """
+    serializer: URLSafeTimedSerializer = _get_dangerous_serializer()
+    try:
+        return serializer.loads(token, max_age=expiration)
+    except BadSignature:
+        return None
 
 
 def get_current_user_id(token: Annotated[str, Depends(oauth2_scheme)]) -> dict[str, any]:
@@ -127,6 +147,14 @@ def jwt_decode(jwt_token: str) -> dict[str, any]:
             )
         }
     return jwt_decode
+
+
+def _get_dangerous_serializer() -> URLSafeTimedSerializer:
+    """Инициализирует сериализатор генерации токенов."""
+    return URLSafeTimedSerializer(
+        secret_key=SECRET_KEY,
+        salt=SALT,
+    )
 
 
 def _jwt_generate(payload: dict[str, any], token_type: str) -> tuple[str, int]:
