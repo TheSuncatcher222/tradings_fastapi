@@ -3,24 +3,34 @@
 """
 
 from fastapi import APIRouter, Depends, status
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 from sqlalchemy.engine.result import ChunkedIteratorResult
-from sqlalchemy.sql import insert, select
-from sqlalchemy.sql.dml import Insert
+from sqlalchemy.sql import insert, select, update
+from sqlalchemy.sql.dml import Insert, Update
 from sqlalchemy.sql.selectable import Select
 
+from src.auth.models import UsedPassResetToken
 from src.auth.schemas import (
-    AuthLogin, AuthRegister, JwtTokenAccess, JwtTokenRefresh,
+    AuthLogin, AuthPasswordChange, AuthPasswordReset, AuthPasswordResetConfirm,
+    AuthRegister, JwtTokenAccess, JwtTokenRefresh,
 )
-from src.auth.utils import hash_password, jwt_decode, jwt_generate_pair
+from src.auth.tasks import send_password_has_changed_to_mail, send_password_restore_to_mail
+from src.auth.utils import (
+    dangerous_token_generate, dangerous_token_verify,
+    get_current_user_id, hash_password,
+    jwt_decode, jwt_generate_pair,
+)
+from src.celery_app import PRIOR_LOW, PRIOR_IMPORTANT
 from src.config import (
     DOMAIN_NAME,
+    JSON_ERR_ACCOUNT_BLOCKED,
     JSON_ERR_EMAIL_IS_ALREADY_REGISTERED, JSON_ERR_EMAIL_OR_PASS_INVALID,
-    JSON_ERR_CREDENTIALS_TYPE, JWT_TYPE_REFRESH,
+    JSON_ERR_CREDENTIALS_TYPE, JSON_ERR_PASS_INVALID,
+    JWT_TYPE_REFRESH,
 )
 from src.database import AsyncSession, get_async_session
-from src.users.models import User
-from src.users.schemas import UserRepresent
+from src.user.models import User
+from src.user.schemas import UserRepresent
 
 router_auth: APIRouter = APIRouter(
     prefix='/auth',
@@ -45,7 +55,7 @@ async def auth_login(
     user: User | None = queryset.scalars().first()
 
     raw_password: str = user_data.get('password')
-    # TODO: рассмотреть логику проверки is.active
+
     if (
         user is None or
         hash_password(raw_password=raw_password) != user.hashed_password
@@ -53,6 +63,12 @@ async def auth_login(
         return JSONResponse(
             content=JSON_ERR_EMAIL_OR_PASS_INVALID,
             status_code=status.HTTP_400_BAD_REQUEST,
+        )
+
+    if not user.is_active:
+        return JSONResponse(
+            content=JSON_ERR_ACCOUNT_BLOCKED,
+            status_code=status.HTTP_403_FORBIDDEN,
         )
 
     token_access, _, token_refresh, expires = jwt_generate_pair(
@@ -149,4 +165,151 @@ async def auth_register(
         telegram_username=new_user.telegram_username,
         account_balance=new_user.account_balance,
         reg_date=new_user.reg_date,
+    )
+
+
+@router_auth.post(
+    path='/password-change',
+)
+async def auth_password_change(
+    passwords: AuthPasswordChange,
+    user_data: dict[str, any] = Depends(get_current_user_id),
+    session: AsyncSession = Depends(get_async_session),
+):
+    """Изменяет старый пароль на новый."""
+    passwords: dict[str, str] = passwords.model_dump()
+
+    if 'err_response' in user_data:
+        return user_data.get('err_response')
+
+    query: Select = select(User).where(User.id == user_data.get('id'))
+    queryset: ChunkedIteratorResult = await session.execute(query)
+    user: User = queryset.scalars().first()
+
+    if hash_password(raw_password=passwords.get('password')) != user.hashed_password:
+        return JSONResponse(
+            content=JSON_ERR_PASS_INVALID,
+            status_code=status.HTTP_400_BAD_REQUEST,
+        )
+
+    stmt: Update = update(
+        User,
+    ).where(
+        User.id == user_data.get('id'),
+    ).values(
+        hashed_password=hash_password(raw_password=passwords.get('new_password'))
+    )
+    await session.execute(stmt)
+    await session.commit()
+
+    username: str = f'{user.name_first} {user.name_last}'
+    send_password_has_changed_to_mail.apply_async(
+        args=(username,),
+        property=PRIOR_IMPORTANT,
+    )
+
+    return JSONResponse(
+        content={
+            'password_change': 'Пароль успешно изменен'
+        },
+        status_code=status.HTTP_200_OK,
+    )
+
+
+@router_auth.post(
+    path='/password-reset',
+)
+async def password_reset(
+    email: AuthPasswordReset,
+    session: AsyncSession = Depends(get_async_session),
+):
+    """
+    Осуществляет первый этап восстановления пароля:
+    отправляет ссылку для восстановления пароля.
+    """
+    email: dict[str, str] = email.model_dump()
+    query: Select = select(User).where(User.email == email.get('email'))
+    queryset: ChunkedIteratorResult = await session.execute(query)
+    user: User | None = queryset.scalars().first()
+
+    if user:
+        reset_token: str = dangerous_token_generate({'id': user.id})
+        url_pass_reset_confirm: str = (
+            f'https://{DOMAIN_NAME}/api/auth/password-reset-confirm/{reset_token}'
+        )
+        send_password_restore_to_mail.apply_async(
+            args=(url_pass_reset_confirm,),
+            property=PRIOR_LOW,
+        )
+    return Response(status_code=status.HTTP_200_OK)
+
+
+@router_auth.post(
+    path='/password-reset-confirm',
+)
+async def password_reset_confirm(
+    passwords: AuthPasswordResetConfirm,
+    session: AsyncSession = Depends(get_async_session),
+):
+    """
+    Осуществляет второй этап восстановления пароля:
+    устанавливает новый пароль пользователя.
+    """
+    # TODO: логгировать неуспешные попытки. Сделать задержку.
+    headers: dict[str, str] = {'Referrer-Policy': 'no-referrer'}
+
+    passwords: dict[str, str] = passwords.model_dump()
+    reset_token: str = passwords.get('reset_token')
+    token_data: dict = dangerous_token_verify(token=reset_token)
+
+    user: None = None
+    if token_data is not None:
+        query: Select = select(UsedPassResetToken).where(UsedPassResetToken.token == reset_token)
+        queryset: ChunkedIteratorResult = await session.execute(query)
+        token: UsedPassResetToken | None = queryset.scalars().first()
+        if token is None:
+            query: Select = select(User).where(User.id == token_data.get('id'))
+            queryset: ChunkedIteratorResult = await session.execute(query)
+            user: User | None = queryset.scalars().first()
+    if user is None:
+        return JSONResponse(
+            content={
+                'password_reset': (
+                    'Произошла ошибка. Пожалуйста, запросите новую '
+                    'ссылку восстановления пароля'
+                )
+            },
+            status_code=status.HTTP_400_BAD_REQUEST,
+            headers=headers,
+        )
+
+    stmt: Update = update(
+        User,
+    ).where(
+        User.id == token_data.get('id'),
+    ).values(
+        hashed_password=hash_password(raw_password=passwords.get('new_password'))
+    )
+    await session.execute(stmt)
+
+    stmt: Insert = insert(
+        UsedPassResetToken,
+    ).values(
+        token=reset_token,
+    )
+    await session.execute(stmt)
+    await session.commit()
+
+    username: str = f'{user.name_first} {user.name_last}'
+    send_password_has_changed_to_mail.apply_async(
+        args=(username,),
+        property=PRIOR_IMPORTANT,
+    )
+
+    return JSONResponse(
+        content={
+            'password_reset': "Пароль учетной записи успешно изменен"
+        },
+        status_code=status.HTTP_200_OK,
+        headers=headers,
     )
