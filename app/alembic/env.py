@@ -63,6 +63,7 @@ def run_migrations_offline() -> None:
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
+        process_revision_directives=_process_revision_directives,
     )
 
     with context.begin_transaction():
@@ -84,11 +85,29 @@ def run_migrations_online() -> None:
 
     with connectable.connect() as connection:
         context.configure(
-            connection=connection, target_metadata=target_metadata
+            connection=connection,
+            target_metadata=target_metadata,
+            process_revision_directives=_process_revision_directives,
         )
 
         with context.begin_transaction():
             context.run_migrations()
+
+
+def _process_revision_directives(context, revision, directives):
+    """
+    Используется для обнаружения отсутствия изменений
+    в конфигурации базы данных с момента последней
+    произведенной миграции.
+    Необходим для того, чтобы Alembic не генерировал "пустые"
+    миграционные файлы.
+    """
+    if config.cmd_opts.autogenerate:
+        script = directives[0]
+        if script.upgrade_ops.is_empty():
+            directives[:] = []
+            print('No migrations to apply.')
+    return
 
 
 if context.is_offline_mode():
