@@ -41,6 +41,6 @@ async def feedback_send(
     send_feedback_to_mail.delay(feedback_data)
 
     return JSONResponse(
-        content={'feedback': 'Ваше сообщение успешно отправлено!'},
+        content={'feedback': 'Ваше сообщение успешно отправлено'},
         status_code=status.HTTP_200_OK,
     )
