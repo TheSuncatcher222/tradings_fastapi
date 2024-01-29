@@ -8,7 +8,7 @@ from pydantic import BaseModel, EmailStr, validator
 
 from src.auth.schemas import TELEGRAM_USERNAME_LEN_MAX
 from src.feedback.models import FEEDBACK_MESSAGE_LEN
-from src.users.models import USER_USERNAME_LEN
+from src.user.models import USER_USERNAME_LEN
 
 FEEDBACK_CONTACT_LEN: int = TELEGRAM_USERNAME_LEN_MAX + len('https://t.me/')
 

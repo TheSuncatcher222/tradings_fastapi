@@ -9,7 +9,7 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy.sql import func
 
 from src.config import TABLE_FEEDBACK
-from src.users.models import USER_EMAIL_LEN, USER_TELEGRAM_LEN, USER_USERNAME_LEN
+from src.user.models import USER_EMAIL_LEN, USER_TELEGRAM_LEN, USER_USERNAME_LEN
 
 FEEDBACK_CONTACTS_LEN: int = 30
 FEEDBACK_MESSAGE_LEN: int = 512
