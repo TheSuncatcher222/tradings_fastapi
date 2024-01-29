@@ -46,6 +46,8 @@ JWT_TYPE_ACCESS: str = 'access'
 
 JWT_TYPE_REFRESH: str = 'refresh'
 
+ONE_DAY_SEC: int = 60 * 60 * 24
+
 PASS_ENCODE: str = os.getenv('PASS_ENCODE')
 
 SALT: bytes = os.getenv('SALT').encode(PASS_ENCODE)
@@ -60,6 +62,8 @@ ITERATIONS: int = int(os.getenv('ITERATIONS'))
 
 TABLE_FEEDBACK: str = 'table_feedback'
 
+TABLE_USED_PASS_RESET_TOKEN: str = 'table_used_pass_reset_token'
+
 TABLE_USER: str = 'table_user'
 
 
@@ -72,13 +76,11 @@ SMTP_PASSWORD: str = os.getenv('SMTP_PASSWORD')
 
 SMTP_PORT: str = os.getenv('SMTP_PORT')
 
+SMTP_PROTOCOL: str = os.getenv('SMTP_PROTOCOL')
+
 SMTP_USER: str = os.getenv('SMTP_USER')
 
 SUPPORT_EMAIL_TO: str = os.getenv('SUPPORT_EMAIL_TO')
-
-USE_SSL: bool = bool(os.getenv('USE_SSL').lower() == 'true')
-
-USE_TSL: bool = bool(os.getenv('USE_SSL').lower() == 'true')
 
 
 """Настройки сервиса."""
@@ -122,6 +124,14 @@ def generate_json_error_content(
     }
 
 
+JSON_ERR_ACCOUNT_BLOCKED: dict[str, any] = generate_json_error_content(
+    detail='Аккаунт временно заблокирован',
+    type_resp='validation_error',
+    loc=['body', 'email', 'password'],
+    type_err='value_error',
+)
+
+
 JSON_ERR_CREDENTIALS_INVALID_EXPIRED: dict[str, any] = generate_json_error_content(
     detail='Токен недействителен или срок его действия истек',
     type_resp='token_not_valid',
@@ -147,5 +157,12 @@ JSON_ERR_EMAIL_IS_ALREADY_REGISTERED: dict[str, any] = generate_json_error_conte
     detail='Пользователь с таким адресом электронной почты уже зарегистрирован',
     type_resp='validation_error',
     loc=['body', 'email'],
+    type_err='value_error',
+)
+
+JSON_ERR_PASS_INVALID: dict[str, any] = generate_json_error_content(
+    detail='Пароль недействителен',
+    type_resp='validation_error',
+    loc=['body', 'password'],
     type_err='value_error',
 )
