@@ -19,7 +19,7 @@ from src.auth.routers import router_auth
 from src.config import ASGI_PORT, DEBUG, DOMAIN_IP, DOMAIN_NAME, WORKERS_AMOUNT
 from src.logger import get_logger, Logger
 from src.feedback.routers import router_feedback
-from src.users.routers import router_users
+from src.user.routers import router_users
 
 app: FastAPI = FastAPI(
     debug=DEBUG,
