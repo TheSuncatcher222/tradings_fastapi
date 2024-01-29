@@ -1,7 +1,7 @@
 """
 Модуль соединения с базой данных через SQLAlchemy.
 
-Инициализируются асинхронная (asyncpg) и синхронная ()
+Инициализируются асинхронная (asyncpg) и синхронная (psycopg2)
 """
 
 from typing import AsyncGenerator
