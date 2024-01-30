@@ -3,13 +3,13 @@
 """
 
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 
 from sqlalchemy import DateTime, String
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 
-from src.config import TABLE_USER
+from src.config import Base, TABLE_USER
 
 # INFO: в pydantic.EmailStr разрешенные длины строк составляют 64@63.63
 USER_EMAIL_LEN: int = 64 + 63 + 63
@@ -17,11 +17,6 @@ USER_HASH_PASS_LEN: int = 256
 USER_PHONE_LEN: int = 20
 USER_TELEGRAM_LEN: int = 32
 USER_USERNAME_LEN: int = 25
-
-
-class Base(DeclarativeBase):
-    """Инициализирует фабрику создания декларативных классов моделей."""
-    pass
 
 
 class User(Base):
@@ -73,6 +68,9 @@ class User(Base):
         String(length=USER_PHONE_LEN),
         comment='номер телефона',
         nullable=True,
+    )
+    products: Mapped[List['Product']] = relationship(  # noqa (F821)
+        back_populates='seller',
     )
     reg_date: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
