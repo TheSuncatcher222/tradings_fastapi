@@ -8,29 +8,17 @@
 
 
 ##########################################################################
-################################# TOKENS #################################
+################################ ANSIBLE #################################
 ##########################################################################
 
 
-@token_access = jwt_token_access
-
-@token_refresh = jwt_token_refresh
-
-
-##########################################################################
-################################ EDPOINTS ################################
-##########################################################################
-
-
-@auth = http://127.0.0.1:8000/api/auth
-
-@feedbacks = http://127.0.0.1:8000/api/feedbacks
-
-@docs = http://127.0.0.1:8000/api/docs
-
-@products = http://127.0.0.1:8000/api/products
-
-@users = http://127.0.0.1:8000/api/users
+# Under development...
+# ###
+# POST http://127.0.0.1:8000/api/ansible/run_test/ HTTP/1.1
+# Accept-Language: en-US,en;q=0.8
+# Accept-Language: ru-RU
+# Authorization: Bearer jwt_token_access
+# User-Agent: custom_vscode-restclient
 
 
 ##########################################################################
@@ -39,7 +27,7 @@
 
 
 ###
-POST {{auth}}/register/ HTTP/1.1
+POST http://127.0.0.1:8000/api/auth/register/ HTTP/1.1
 Accept-Language: en-US,en;q=0.8
 Accept-Language: ru-RU
 Content-Type: application/json
@@ -54,8 +42,17 @@ User-Agent: custom_vscode-restclient
     "telegram_username": "iVan_777"
 }
 
+# {
+#     "name_first": "Диана",
+#     "name_last": "Иванова",
+#     "email": "DiVan@email.com",
+#     "phone": "+79111868217",
+#     "password": "12345aA!",
+#     "telegram_username": "DiVan_777"
+# }
+
 ###
-POST {{auth}}/login/ HTTP/1.1
+POST http://127.0.0.1:8000/api/auth/login/ HTTP/1.1
 Accept-Language: en-US,en;q=0.8
 Accept-Language: ru-RU
 Content-Type: application/json
@@ -66,9 +63,48 @@ User-Agent: custom_vscode-restclient
     "password": "12345aA!"
 }
 
+###
+POST http://127.0.0.1:8000/api/auth/password-change/ HTTP/1.1
+Accept-Language: en-US,en;q=0.8
+Accept-Language: ru-RU
+Authorization: Bearer jwt_token_access
+Content-Type: application/json
+User-Agent: custom_vscode-restclient
+
+{
+    "password": "12345aA!",
+    "new_password": "12345aA!new",
+    "new_password_confirm": "12345aA!new"
+}
 
 ###
-POST {{auth}}/refresh/ HTTP/1.1
+POST http://127.0.0.1:8000/api/auth/password-reset/ HTTP/1.1
+Accept-Language: en-US,en;q=0.8
+Accept-Language: ru-RU
+Authorization: Bearer jwt_token_access
+Content-Type: application/json
+User-Agent: custom_vscode-restclient
+
+{
+    "email": "iVan@email.com"
+}
+
+###
+POST http://127.0.0.1:8000/api/auth/password-reset-confirm/ HTTP/1.1
+Accept-Language: en-US,en;q=0.8
+Accept-Language: ru-RU
+Authorization: Bearer jwt_token_access
+Content-Type: application/json
+User-Agent: custom_vscode-restclient
+
+{
+    "reset_token": "token",
+    "new_password": "12345aA!",
+    "new_password_confirm": "12345aA!"
+}
+
+###
+POST http://127.0.0.1:8000/api/auth/refresh/ HTTP/1.1
 Accept-Language: en-US,en;q=0.8
 Accept-Language: ru-RU
 Content-Type: application/json
@@ -85,7 +121,7 @@ User-Agent: custom_vscode-restclient
 
 
 ###
-GET {{docs}}/swagger HTTP/1.1
+GET http://127.0.0.1:8000/api/docs/ HTTP/1.1
 Accept-Language: en-US,en;q=0.8
 Accept-Language: ru-RU
 User-Agent: custom_vscode-restclient
@@ -97,7 +133,7 @@ User-Agent: custom_vscode-restclient
 
 
 ###
-POST {{feedbacks}}/send HTTP/1.1
+POST http://127.0.0.1:8000/api/feedbacks/send/ HTTP/1.1
 Accept-Language: en-US,en;q=0.8
 Accept-Language: ru-RU
 Content-Type: application/json
@@ -118,14 +154,14 @@ User-Agent: custom_vscode-restclient
 
 
 ###
-GET {{products}}/items HTTP/1.1
+GET http://127.0.0.1:8000/api/products/items/ HTTP/1.1
 Accept-Language: en-US,en;q=0.8
 Accept-Language: ru-RU
 User-Agent: custom_vscode-restclient
 
 
 ###
-GET {{products}}/categories HTTP/1.1
+GET http://127.0.0.1:8000/api/products/categories/ HTTP/1.1
 Accept-Language: en-US,en;q=0.8
 Accept-Language: ru-RU
 User-Agent: custom_vscode-restclient
@@ -137,7 +173,7 @@ User-Agent: custom_vscode-restclient
 
 
 ###
-GET {{users}}/me HTTP/1.1
+GET http://127.0.0.1:8000/api/users/me/ HTTP/1.1
 Accept-Language: en-US,en;q=0.8
 Accept-Language: ru-RU
 Authorization: Bearer jwt_token_access
