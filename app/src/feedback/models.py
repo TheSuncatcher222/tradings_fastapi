@@ -5,19 +5,14 @@
 from datetime import datetime
 
 from sqlalchemy import DateTime, String
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.sql import func
 
-from src.config import TABLE_FEEDBACK
+from src.config import Base, TABLE_FEEDBACK
 from src.user.models import USER_EMAIL_LEN, USER_TELEGRAM_LEN, USER_USERNAME_LEN
 
 FEEDBACK_CONTACTS_LEN: int = 30
 FEEDBACK_MESSAGE_LEN: int = 512
-
-
-class Base(DeclarativeBase):
-    """Инициализирует фабрику создания декларативных классов моделей."""
-    pass
 
 
 class Feedback(Base):
@@ -54,7 +49,7 @@ class Feedback(Base):
     )
     name: Mapped[str] = mapped_column(
         String(length=USER_USERNAME_LEN),
-        comment='Имя',
+        comment='имя',
     )
     reg_date: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
