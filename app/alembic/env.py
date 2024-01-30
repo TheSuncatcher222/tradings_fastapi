@@ -4,8 +4,8 @@ from alembic import context
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
+from src.config import Base, DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER
 from src.auth.models import Base as BaseAuth
-from src.config import DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER
 from src.feedback.models import Base as BaseFeedback
 from src.product.models import Base as BaseProduct
 from src.user.models import Base as BaseUser
@@ -36,12 +36,7 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = [
-    BaseAuth.metadata,
-    BaseFeedback.metadata,
-    BaseProduct.metadata,
-    BaseUser.metadata,
-]
+target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
