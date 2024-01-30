@@ -5,11 +5,17 @@
 import os
 
 from dotenv import load_dotenv
+from sqlalchemy.orm import DeclarativeBase
 
 load_dotenv()
 
 
 """Настройки базы данных."""
+
+
+class Base(DeclarativeBase):
+    """Инициализирует фабрику создания декларативных классов моделей."""
+    pass
 
 
 DB_HOST: str = os.getenv('DB_HOST')
