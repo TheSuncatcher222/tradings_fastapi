@@ -23,7 +23,7 @@ router_users: APIRouter = APIRouter(
     path='/me',
     response_model=UserRepresent,
 )
-async def user_me(
+async def users_me(
     user_data: dict[str, any] = Depends(get_current_user_id),
     session: AsyncSession = Depends(get_async_session),
 ):
