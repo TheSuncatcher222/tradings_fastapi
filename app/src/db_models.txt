@@ -18,17 +18,18 @@ telegram_is_verified
 Товар (Product):
 ____________________________
 product_id (Primary Key)
-name
+title
 description
 price
-quantity_available
+in_stock
+category_id (Foreign Key, связь с таблицей категорий товаров)
 seller_id (Foreign Key, связь с таблицей пользователей)
 
 
 Категория товара (Category):
 ____________________________
 category_id (Primary Key)
-name
+title
 
 
 Подкатегория товара (Subcategory):
