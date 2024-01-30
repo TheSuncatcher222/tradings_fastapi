@@ -28,6 +28,8 @@
 
 @docs = http://127.0.0.1:8000/api/docs
 
+@products = http://127.0.0.1:8000/api/products
+
 @users = http://127.0.0.1:8000/api/users
 
 
@@ -108,6 +110,25 @@ User-Agent: custom_vscode-restclient
     "message": "Вы классные!",
     "data_process_approve": "True"
 }
+
+
+##########################################################################
+################################ PRODUCTS ################################
+##########################################################################
+
+
+###
+GET {{products}}/items HTTP/1.1
+Accept-Language: en-US,en;q=0.8
+Accept-Language: ru-RU
+User-Agent: custom_vscode-restclient
+
+
+###
+GET {{products}}/categories HTTP/1.1
+Accept-Language: en-US,en;q=0.8
+Accept-Language: ru-RU
+User-Agent: custom_vscode-restclient
 
 
 ##########################################################################
