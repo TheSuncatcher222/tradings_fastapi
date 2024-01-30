@@ -1,0 +1,26 @@
+"""PRODUCT CATEGORY"""
+
+
+SELECT *
+FROM table_product_category
+
+INSERT INTO table_product_category(title)
+VALUES 
+	('Мягкие игрушки'),
+	('Еда'),
+	('Бытовые приборы');
+
+
+"""PRODUCT"""
+
+
+SELECT *
+FROM table_product
+
+INSERT INTO table_product(category_id, description, in_stock, price, seller_id, title)
+VALUES 
+	(1, 'Мягкий и добрый', 10, 25, 1, 'Медвежонок'),
+	(2, 'Со вкусом пряника', 12, 2, 1, 'Мороженое'),
+	(3, 'I9-13700 / RTX 4090 Ti', 1, 1200, 2, 'Компьютер (мощный)'),
+	(2, 'Сливочное пиво', 8, 3, 1, 'Мороженое'),
+	(3, 'I5-7500KF / RTX 3060', 3, 900, 2, 'Компьютер');
