@@ -62,6 +62,10 @@ ITERATIONS: int = int(os.getenv('ITERATIONS'))
 
 TABLE_FEEDBACK: str = 'table_feedback'
 
+TABLE_PRODUCT: str = 'table_product'
+
+TABLE_PRODUCT_CATEGORY: str = 'table_product_category'
+
 TABLE_USED_PASS_RESET_TOKEN: str = 'table_used_pass_reset_token'
 
 TABLE_USER: str = 'table_user'
