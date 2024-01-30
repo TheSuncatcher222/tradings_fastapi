@@ -5,19 +5,14 @@
 from typing import List
 
 from sqlalchemy import ForeignKey, String
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.config import TABLE_PRODUCT, TABLE_PRODUCT_CATEGORY
+from src.config import Base, TABLE_PRODUCT, TABLE_PRODUCT_CATEGORY, TABLE_USER
 
 PRODUCT_TITLE_LEN: int = 50
 PRODUCT_DESCRIPTION_LEN: int = 200
 
 PRODUCT_CATEGORY_TITLE_LEN: int = 50
-
-
-class Base(DeclarativeBase):
-    """Инициализирует фабрику создания декларативных классов моделей."""
-    pass
 
 
 class Product(Base):
@@ -29,7 +24,7 @@ class Product(Base):
     }
 
     category: Mapped['ProductCategory'] = relationship(
-        back_populates='product',
+        back_populates='products',
     )
     category_id: Mapped[int] = mapped_column(
         ForeignKey(f'{TABLE_PRODUCT_CATEGORY}.id'),
@@ -49,6 +44,13 @@ class Product(Base):
     )
     price: Mapped[int] = mapped_column(
         comment='цена',
+    )
+    seller_id: Mapped[int] = mapped_column(
+        ForeignKey(f'{TABLE_USER}.id'),
+        comment='id продавца',
+    )
+    seller: Mapped['User'] = relationship(  # noqa (F821)
+        back_populates='products',
     )
     title: Mapped[str] = mapped_column(
         String(length=PRODUCT_TITLE_LEN),
@@ -72,6 +74,6 @@ class ProductCategory(Base):
         String(length=PRODUCT_CATEGORY_TITLE_LEN),
         comment='название',
     )
-    product: Mapped[List['Product']] = relationship(
+    products: Mapped[List['Product']] = relationship(
         back_populates='category',
     )
