@@ -1,20 +1,15 @@
 """
-Модуль с ORM моделями базы данных приложения "feedback".
+Модуль с ORM моделями базы данных приложения "auth".
 """
 
 from datetime import datetime, timedelta
 
 from sqlalchemy import DateTime, String
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column
 
-from src.config import TABLE_USED_PASS_RESET_TOKEN, ONE_DAY_SEC
+from src.config import Base, TABLE_USED_PASS_RESET_TOKEN, ONE_DAY_SEC
 
 TOKEN_MAX_LEN: int = 256
-
-
-class Base(DeclarativeBase):
-    """Инициализирует фабрику создания декларативных классов моделей."""
-    pass
 
 
 class UsedPassResetToken(Base):
