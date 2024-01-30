@@ -19,6 +19,7 @@ from src.auth.routers import router_auth
 from src.config import ASGI_PORT, DEBUG, DOMAIN_IP, DOMAIN_NAME, WORKERS_AMOUNT
 from src.logger import get_logger, Logger
 from src.feedback.routers import router_feedback
+from src.product.routers import router_product
 from src.user.routers import router_users
 
 app: FastAPI = FastAPI(
@@ -50,6 +51,7 @@ app.add_middleware(
 ROUTERS: list[FastAPI] = [
     router_auth,
     router_feedback,
+    router_product,
     router_users,
 ]
 
