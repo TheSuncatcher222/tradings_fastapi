@@ -29,7 +29,7 @@ class User(Base):
 
     __tablename__ = TABLE_USER
     __tableargs__ = {
-        'comment': 'Пользователи'
+        'comment': 'Пользователи',
     }
 
     account_balance: Mapped[int] = mapped_column(
