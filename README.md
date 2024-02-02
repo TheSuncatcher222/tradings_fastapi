@@ -91,7 +91,7 @@ cd ..
 docker-compose up --build
 ```
 
-✅ Проверить доступность проекта на `localhost:80`
+✅ Проверить доступность проекта на `localhost:8000`
 
 ```
 http://localhost:8000/
