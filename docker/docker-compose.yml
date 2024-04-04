@@ -3,6 +3,7 @@ version: '3.8'
 name: tradings
 
 volumes:
+  tradings_pg_admin_volume:
   tradings_postgresql_volume:
   tradings_redis_volume:
   tradings_ssh_volume:
@@ -53,9 +54,13 @@ services:
       - postgresql
     env_file:
       - .env
+    expose:
+      - 5050
     hostname: tradings_pg_admin_host
     image: dpage/pgadmin4
     restart: on-failure
+    volumes:
+      - tradings_pg_admin_volume:/var/lib/pgadmin
 
   backend:
     build:
