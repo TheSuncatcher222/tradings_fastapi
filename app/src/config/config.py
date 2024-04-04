@@ -35,11 +35,14 @@ class Settings(BaseSettings):
     """Настройки SQLAlchemy Admin."""
     ADMIN_PASSWORD: str = 'admin'
     ADMIN_SECRET_KEY: str = 'string'
+    ADMIN_URL: str = 'admin'
     ADMIN_USERNAME: str = 'admin'
 
     """Настройки базы данных Redis."""
     REDIS_HOST: str = 'tradings_redis_host'
     REDIS_PORT: int = '6379'
+    REDIS_DB_CELERY_BACKEND: int = 0
+    REDIS_DB_CELERY_BROKER: int = 1
 
     """Настройки безопасности: шифрование пароля."""
     HASH_NAME: str = 'md5'
