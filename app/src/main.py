@@ -8,24 +8,25 @@ import os
 import sys
 
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.cors import CORSMiddleware
+from sqladmin import Admin
 import uvicorn
 
 # INFO: добавляет корневую директорию проекта в sys.path для возможности
 #       использования абсолютных путей импорта данных из модулей.
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from src.auth.routers import router_auth
-from src.config import ASGI_PORT, DEBUG, DOMAIN_IP, DOMAIN_NAME, WORKERS_AMOUNT
-from src.logger import get_logger, Logger
-from src.feedback.routers import router_feedback
-from src.product.routers import router_product
-from src.user.routers import router_users
+from src.api.base_routers import router_api
+from src.config.config import settings
+from src.database.database import async_engine
+from src.models.sqlalchemy_admin import authentication_backend, admin_views
+from src.utils.logger import get_logger, Logger
+
 
 app: FastAPI = FastAPI(
-    debug=DEBUG,
-    title='Tradings FastAPI',
-    description='Your marketplace MVP project',
+    debug=settings.DEBUG,
+    title='tradings Tech',
+    description='tradings Tech hosting service',
     version='0.0.1',
     openapi_url='/api/docs/openapi.json',
     docs_url='/api/docs/swagger',
@@ -36,8 +37,10 @@ logger: Logger = get_logger(name=__name__)
 
 allowed_origins = [
     'http://localhost:80',
-    f'https://{DOMAIN_IP}',
-    f'https://{DOMAIN_NAME}',
+    'http://localhost:8000',
+    'http://localhost:8080',
+    f'https://{settings.DOMAIN_IP}',
+    f'https://{settings.DOMAIN_NAME}',
 ]
 
 app.add_middleware(
@@ -48,25 +51,27 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-ROUTERS: list[FastAPI] = [
-    router_auth,
-    router_feedback,
-    router_product,
-    router_users,
-]
+app.include_router(
+    router=router_api,
+    prefix='/api'
+)
 
-for router in ROUTERS:
-    app.include_router(
-        router=router,
-        prefix='/api'
-    )
+admin = Admin(
+    app=app,
+    engine=async_engine,
+    authentication_backend=authentication_backend,
+    base_url=f'/api/{settings.ADMIN_URL}/',
+)
+
+for admin_view in admin_views:
+    admin.add_view(admin_view)
 
 if __name__ == '__main__':
     """Автозапуск ASGI и сервиса."""
     uvicorn.run(
         app='main:app',
         host='0.0.0.0',
-        port=ASGI_PORT,
+        port=8000,
         reload=True,
-        workers=WORKERS_AMOUNT,
+        workers=4,
     )
