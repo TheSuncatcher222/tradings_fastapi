@@ -7,6 +7,7 @@ celerybeat-schedule
 
 # Environment.
 .env
+.venv/
 venv/
 
 # Python cache.
