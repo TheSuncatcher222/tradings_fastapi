@@ -52,7 +52,7 @@ services:
     depends_on:
       - postgresql
     env_file:
-      - ../app/src/config/.env
+      - .env
     hostname: tradings_pg_admin_host
     image: dpage/pgadmin4
     restart: on-failure
