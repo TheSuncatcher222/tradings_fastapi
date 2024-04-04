@@ -11,10 +11,18 @@ celery_app: Celery = Celery(
 )
 
 celery_app.autodiscover_tasks(
-    [],
+    [
+        'src.celery_app.auth',
+    ],
 )
 
-celery_app.conf.beat_schedule = {}
+celery_app.conf.beat_schedule = {
+    'delete_expired_pass_reset_tokens': {
+        # Удаляет просроченные токены восстановления пароля.
+        'task': 'src.celery_app.auth.tasks.delete_expired_pass_reset_tokens',
+        'schedule': settings.ONE_DAY_SEC,  # INFO: время в секундах.
+    },
+}
 
 
 """Priority levels."""
