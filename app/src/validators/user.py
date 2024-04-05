@@ -9,6 +9,12 @@ NL: str = '\n'
 COMPANY_DESCRIPTION_MAX: int = 250
 COMPANY_NAME_MAX: int = 30
 
+# INFO: в pydantic.EmailStr разрешенные длины строк составляют 64@63.63
+USER_EMAIL_LEN: int = 64 + 63 + 63
+USER_HASH_PASS_LEN: int = 256
+USER_PHONE_LEN: int = 20
+USER_USERNAME_LEN: int = 25
+
 USER_NAME_FIRST_ERROR: str = (
     'Укажите правильное имя (например: Иван или Анна-Мария)'
 )
@@ -43,6 +49,10 @@ PASS_CHARS_VALIDATORS: dict[str, str] = {
     lambda s: any(char.isupper() for char in s): '\n- включает хотя бы одну заглавную букву (A-Z)',
     lambda s: any(char in PASS_SPECIAL_CHARS for char in s): f'{NL}- включает хотя бы один специальный символ ({PASS_SPECIAL_CHARS})',
 }
+
+USER_SALESMAN_COMPANY_DESCRIPTION_LEN: int = 200
+USER_SALESMAN_COMPANY_IMAGE_LEN: int = 200
+USER_SALESMAN_COMPANY_NAME_LEN: int = 50
 
 
 def validate_description(cls, value: str, values: dict):
