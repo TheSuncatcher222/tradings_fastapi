@@ -49,10 +49,13 @@ class Base(DeclarativeBase):
 class TableNames():
     """Содержит в себе названия таблиц проекта."""
     # auth
-    used_pass_reset_token = 'used_pass_reset_token'
+    used_pass_reset_token = 'table_used_pass_reset_token'
+    # product
+    product = 'table_product'
+    product_category = 'table_product_category'
     # user
-    user = 'user'
-    user_salesman = 'user_salesman'
+    user = 'table_user'
+    user_salesman = 'table_user_salesman'
 
 
 table_names = TableNames()
