@@ -1,3 +1,4 @@
+from src.models.auth import UsedPassResetToken
 from src.models.user import (
     User, UserAdmin,
     UserSalesman, UserSalesmanAdmin,
@@ -5,6 +6,8 @@ from src.models.user import (
 
 __all__ = (
     # Models:
+    #   - auth
+    'UsedPassResetToken',
     #   - user
     'User',
     'UserAdmin',
