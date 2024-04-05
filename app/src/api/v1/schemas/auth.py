@@ -4,7 +4,7 @@
 
 from pydantic import BaseModel, EmailStr, validator
 
-from src.api.v1.schemas.user import PASS_CHARS_VALIDATORS
+from src.validators.user import PASS_CHARS_VALIDATORS
 
 
 class AuthLogin(BaseModel):
