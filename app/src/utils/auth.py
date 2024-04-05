@@ -9,9 +9,12 @@ from typing import Annotated
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 
+from src.api.v1.crud.user import user_v1_crud
 from src.celery_app.celery_app import PRIOR_MEDIUM
 from src.celery_app.auth.tasks import send_email_confirm_code_to_email
 from src.config.config import settings
+from src.database.database import AsyncSession, get_async_session
+from src.models.user import User
 from src.utils.itsdangerous import dangerous_token_generate
 from src.utils.jwt import jwt_decode
 
@@ -55,6 +58,22 @@ async def get_current_user_payload(
         user_data['is_salesman'] = payload.get('is_salesman', False)
 
     return user_data
+
+
+async def get_current_user(
+    token: Annotated[str, Depends(oauth2_scheme)],
+    session: AsyncSession = Depends(get_async_session),
+) -> User:
+    """Возвращает объект пользователя из данных JWT токена доступа."""
+    payload: dict[str, any] = await _get_jwt_payload(token=str(token))
+    # INFO. Использование retrieve_by_id не имеет смысла,
+    #       так как update_by_id также возвращает объект User,
+    #       а надо обновить его поле last_login.
+    user: User = await user_v1_crud.retrieve_by_id(
+        obj_id=int(payload.get('sub')),
+        session=session,
+    )
+    return user
 
 
 async def generate_email_confirm_code(user_id: int) -> str:
