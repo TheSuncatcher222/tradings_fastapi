@@ -59,6 +59,7 @@ class User(Base):
     )
     is_salesman: Mapped[bool] = mapped_column(
         comment='статус продавца',
+        server_default=expression.false(),
     )
     hashed_password: Mapped[Optional[str]] = mapped_column(
         String(length=USER_HASH_PASS_LEN),
