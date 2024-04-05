@@ -9,6 +9,10 @@ from starlette.requests import Request
 from src.config.config import settings
 from src.database.database import Base
 from src.models import (
+    #   - product
+    ProductAdmin,
+    ProductCategoryAdmin,
+    #   - user
     UserAdmin,
     UserSalesmanAdmin,
 )
@@ -16,6 +20,9 @@ from src.utils.auth import get_current_admin_payload
 from src.utils.jwt import jwt_generate_pair
 
 admin_views: list[Base] = [
+    #   - product
+    ProductAdmin,
+    ProductCategoryAdmin,
     #   - user
     UserAdmin,
     UserSalesmanAdmin,
