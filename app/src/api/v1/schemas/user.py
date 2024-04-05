@@ -8,7 +8,7 @@ from typing import Optional
 from pydantic import BaseModel, EmailStr, validator
 from pydantic_extra_types.phone_numbers import PhoneNumber
 
-from app.src.validators.user import (
+from src.validators.user import (
     validate_company_name,
     validate_email,
     validate_password,
