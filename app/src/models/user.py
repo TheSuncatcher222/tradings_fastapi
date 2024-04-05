@@ -4,7 +4,7 @@
 
 from datetime import datetime
 from decimal import Decimal
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
 from sqladmin import ModelView
 from sqlalchemy import DateTime, DECIMAL, ForeignKey, String
@@ -12,17 +12,19 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import expression, func
 
 from src.database.database import Base, table_names
+from src.validators.user import (
+    USER_EMAIL_LEN,
+    USER_HASH_PASS_LEN,
+    USER_PHONE_LEN,
+    USER_USERNAME_LEN,
 
-# INFO: в pydantic.EmailStr разрешенные длины строк составляют 64@63.63
-USER_EMAIL_LEN: int = 64 + 63 + 63
-USER_HASH_PASS_LEN: int = 256
-USER_PHONE_LEN: int = 20
-USER_TELEGRAM_LEN: int = 32
-USER_USERNAME_LEN: int = 25
+    USER_SALESMAN_COMPANY_DESCRIPTION_LEN,
+    USER_SALESMAN_COMPANY_IMAGE_LEN,
+    USER_SALESMAN_COMPANY_NAME_LEN,
+)
 
-USER_SALESMAN_COMPANY_DESCRIPTION_LEN: int = 200
-USER_SALESMAN_COMPANY_IMAGE_LEN: int = 200
-USER_SALESMAN_COMPANY_NAME_LEN: int = 50
+if TYPE_CHECKING:
+    from src.models.product import Product
 
 
 class User(Base):
@@ -39,7 +41,7 @@ class User(Base):
         primary_key=True,
     )
 
-    # Fields
+    # Columns
     email: Mapped[str] = mapped_column(
         String(length=USER_EMAIL_LEN),
         comment='email',
@@ -91,6 +93,10 @@ class User(Base):
     )
 
     # Relations
+    products: Mapped[list['Product']] = relationship(
+        'Product',
+        back_populates='salesman',
+    )
     user_salesman: Mapped['UserSalesman'] = relationship(
         back_populates='user',
     )
