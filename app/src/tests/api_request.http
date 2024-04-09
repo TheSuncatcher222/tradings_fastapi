@@ -22,8 +22,8 @@ User-Agent: custom_vscode-restclient
 {
     "name_first": "Иван",
     "name_last": "Иванов",
-    "email": "iVan1@email.com",
-    "phone": "+79111868216",
+    "email": "iVan@email.com",
+    "phone": "79999999999",
     "password": "12345aA!"
 }
 
