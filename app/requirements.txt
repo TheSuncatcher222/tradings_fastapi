@@ -1,8 +1,6 @@
 # Alembic
 alembic==1.13.1
-phonenumbers  # Для PhoneNumber из pydantic-extra-types.
 pydantic[email]
-pydantic-extra-types
 pydantic-settings
 
 # Celery + Redis

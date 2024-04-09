@@ -6,7 +6,6 @@ from datetime import datetime
 from typing import Optional
 
 from pydantic import BaseModel, EmailStr, validator
-from pydantic_extra_types.phone_numbers import PhoneNumber
 
 from src.validators.user import (
     validate_company_name,
@@ -78,7 +77,7 @@ class UserRegister(BaseModel):
     name_first: str
     name_last: str
     email: EmailStr
-    phone: Optional[PhoneNumber] = None
+    phone: Optional[str] = None
     password: str
     is_salesman: Optional[bool] = False
     company_name: Optional[str] = None
