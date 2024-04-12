@@ -1,4 +1,7 @@
 from src.models.auth import UsedPassResetToken
+from src.models.feedback import (
+    Feedback, FeedbackAdmin,
+)
 from src.models.product import (
     Product, ProductAdmin,
     ProductCategory, ProductCategoryAdmin,
@@ -12,6 +15,9 @@ __all__ = (
     # Models:
     #   - auth
     'UsedPassResetToken',
+    #   - feedback
+    'Feedback',
+    'FeedbackAdmin',
     #   - product
     'Product',
     'ProductAdmin',
