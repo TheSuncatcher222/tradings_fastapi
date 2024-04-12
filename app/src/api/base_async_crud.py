@@ -84,12 +84,7 @@ class BaseAsyncCrud():
         obj_unique_check: bool = False,
     ) -> Base:
         """Обновляет один объект из базы данных по указанному id."""
-        query: Select = select(self.model).where(self.model.id == obj_id)
-        if (await session.execute(query)).scalars().first() is None:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail='Объект не найден',
-            )
+        await self._check_if_exists(obj_id=obj_id, session=session)
 
         if obj_unique_check:
             await self._check_unique(obj_values=obj_data, session=session)
@@ -101,7 +96,9 @@ class BaseAsyncCrud():
             .returning(self.model)
         )
         obj: Base = (await session.execute(stmt)).scalars().first()
+
         await session.commit()
+
         return obj
 
     async def delete_by_id(
@@ -109,12 +106,39 @@ class BaseAsyncCrud():
         *,
         obj_id: int,
         session: AsyncSession,
+        obj_exists_check: bool = False,
     ) -> None:
         """Удаляет один объект из базы данных по указанному id."""
-        stmt: Delete = delete(self.model).where(self.model.id == obj_id)
-        await session.execute(stmt)
+        if obj_exists_check:
+            obj: Base = await self._check_if_exists(obj_id=obj_id, session=session)
+            await session.delete(obj)
+        else:
+            stmt: Delete = delete(self.model).where(self.model.id == obj_id)
+            await session.execute(stmt)
+
         await session.commit()
+
         return
+
+    async def _check_if_exists(
+        self,
+        *,
+        obj_id: int,
+        session: AsyncSession,
+    ) -> Base:
+        """
+        Проверяет наличие объекта в базе данных по указанному id.
+        Если объект существует - возвращает его.
+        Иначе - вызывает HTTPException.
+        """
+        query: Select = select(self.model).where(self.model.id == obj_id)
+        obj: Base = (await session.execute(query)).scalars().first()
+        if obj is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail='Объект не найден',
+            )
+        return obj
 
     async def _check_unique(
         self,
