@@ -9,6 +9,7 @@ from pydantic import BaseModel
 if TYPE_CHECKING:
     from src.api.v1.schemas.user import UserRepresent
 
+
 class ProductCategorySchema(BaseModel):
     """Схема представления категорий товаров."""
 
