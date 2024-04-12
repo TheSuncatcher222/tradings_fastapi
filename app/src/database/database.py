@@ -50,6 +50,8 @@ class TableNames():
     """Содержит в себе названия таблиц проекта."""
     # auth
     used_pass_reset_token = 'table_used_pass_reset_token'
+    # feedback
+    feedback = 'table_feedback'
     # product
     product = 'table_product'
     product_category = 'table_product_category'
