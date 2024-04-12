@@ -50,8 +50,8 @@ class Product(Base):
     )
 
     # Relationships
-    category: Mapped['ProductCategory'] = relationship(
-        'ProductCategory',
+    sub_category: Mapped['ProductSubCategory'] = relationship(
+        'ProductSubCategory',
         back_populates='products',
     )
     salesman: Mapped['User'] = relationship(
@@ -60,12 +60,12 @@ class Product(Base):
     )
 
     # Foreign Keys
-    category_id: Mapped[int] = mapped_column(
+    sub_category_id: Mapped[int] = mapped_column(
         ForeignKey(
-            column=f'{table_names.product_category}.id',
+            column=f'{table_names.product_sub_category}.product_category_id',
             ondelete='RESTRICT',
         ),
-        comment='id категории товаров'
+        comment='id под-категории товаров'
     )
     salesman_id: Mapped[int] = mapped_column(
         ForeignKey(
@@ -97,8 +97,43 @@ class ProductCategory(Base):
     )
 
     # Relationships
+    product_sub_categories: Mapped['ProductSubCategory'] = relationship(
+        'ProductSubCategory',
+        back_populates='product_category',
+    )
+
+
+class ProductSubCategory(Base):
+    """Декларативная модель представления под-категорий товаров."""
+
+    __tablename__ = table_names.product_sub_category
+    __tableargs__ = {
+        'comment': 'Под-категории товаров',
+    }
+
+    # Primary Keys
+    product_category_id: Mapped[int] = mapped_column(
+        ForeignKey(
+            column=f'{table_names.product_category}.id',
+            ondelete='RESTRICT',
+        ),
+        comment='ID категории товаров',
+        primary_key=True,
+    )
+
+    # Columns
+    title: Mapped[str] = mapped_column(
+        String(length=PRODUCT_CATEGORY_TITLE_LEN),
+        comment='название',
+    )
+
+    # Relationships
+    product_category: Mapped['ProductCategory'] = relationship(
+        'ProductCategory',
+        back_populates='product_sub_categories',
+    )
     products: Mapped[List['Product']] = relationship(
-        back_populates='category',
+        back_populates='sub_category',
     )
 
 
@@ -145,13 +180,13 @@ class ProductAdmin(ModelView, model=Product):
         Product.id,
         Product.salesman,
         Product.title,
-        Product.category,
+        Product.sub_category,
     )
     column_sortable_list = (
         Product.id,
         Product.salesman,
         Product.title,
-        Product.category,
+        Product.sub_category,
         Product.price,
         Product.in_stock,
     )
@@ -162,7 +197,7 @@ class ProductAdmin(ModelView, model=Product):
         'salesman',
         'title',
         'description',
-        'category',
+        'sub_category',
         'price',
         'in_stock',
     )
