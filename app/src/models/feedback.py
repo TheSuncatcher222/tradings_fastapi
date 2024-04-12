@@ -4,6 +4,7 @@
 
 from datetime import datetime
 
+from sqladmin import ModelView
 from sqlalchemy import DateTime, String
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.sql import func
@@ -56,3 +57,75 @@ class Feedback(Base):
         String(length=USER_USERNAME_LEN),
         comment='имя',
     )
+
+
+"""SQLAdmin."""
+
+
+class FeedbackAdmin(ModelView, model=Feedback):
+
+    # Metadata.
+    name = 'Отзыв'
+    name_plural = 'Отзывы'
+    icon = 'fa-solid fa-comment'
+    category = 'Обращения'
+
+    # Permissions.
+    can_create = True
+    can_view_details = True
+    can_export = True
+    can_edit = True
+    can_delete = True
+
+    # Pagination options.
+    page_size = 25
+    page_size_options = (
+        25,
+        50,
+        100,
+        200,
+    )
+
+    # List page.
+    column_default_sort = [
+        (Feedback.id, True),
+    ]
+    column_list = (
+        'id',
+        'username',
+        'email',
+        'contacts',
+        'is_accepted',
+        'created_datetime',
+    )
+    column_searchable_list = (
+        Feedback.id,
+        Feedback.username,
+        Feedback.email,
+        Feedback.contacts,
+        Feedback.created_datetime,
+    )
+    column_sortable_list = (
+        Feedback.id,
+        Feedback.username,
+        Feedback.email,
+        Feedback.contacts,
+        Feedback.is_accepted,
+        Feedback.created_datetime,
+    )
+
+    # Details page.
+    column_details_list = (
+        'id',
+        'username',
+        'email',
+        'contacts',
+        'is_accepted',
+        'created_datetime',
+        'data_process_approve',
+        'message',
+    )
+
+    # Other.
+    pk_columns = (Feedback.id,)
+    is_async = True
