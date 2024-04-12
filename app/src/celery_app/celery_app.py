@@ -13,6 +13,7 @@ celery_app: Celery = Celery(
 celery_app.autodiscover_tasks(
     [
         'src.celery_app.auth',
+        'src.celery_app.feedback',
     ],
 )
 
@@ -21,6 +22,11 @@ celery_app.conf.beat_schedule = {
         # Удаляет просроченные токены восстановления пароля.
         'task': 'src.celery_app.auth.tasks.delete_expired_pass_reset_tokens',
         'schedule': settings.ONE_DAY_SEC,  # INFO: время в секундах.
+    },
+    'send_missed_feedbacks_to_email': {
+        # Проверяет базу данных и ищет неотправленные обращения.
+        'task': 'src.celery_app.feedback.tasks.send_missed_feedbacks_to_email',
+        'schedule': 60 * 5,  # INFO: время в секундах.
     },
 }
 
