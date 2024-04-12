@@ -55,8 +55,11 @@ class TableNames():
     # product
     product = 'table_product'
     product_category = 'table_product_category'
+    product_sub_category = 'product_sub_category'
     # user
     user = 'table_user'
+    user_address = 'user_address'
+    user_payment_data = 'user_payment_data'
     user_salesman = 'table_user_salesman'
 
 
