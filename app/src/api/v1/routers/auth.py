@@ -24,7 +24,8 @@ from src.config.config import settings
 from src.database.database import AsyncSession, get_async_session
 from src.models.auth import UsedPassResetToken
 from src.models.user import User
-from src.utils.auth import get_current_user, send_email_confirm_code
+from src.utils.auth import get_current_user
+from src.utils.email_confirm import send_email_confirm_code
 from src.utils.itsdangerous import dangerous_token_generate, dangerous_token_verify
 from src.utils.jwt import jwt_decode, jwt_generate_pair
 from src.utils.password import hash_password
@@ -212,10 +213,9 @@ async def email_confirm_verify(
             detail='Ссылка подтверждения электронной почты более недействительна',
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         )
-    await user_v1_crud.update_by_id(
+    await user_v1_crud.update_email_by_id(
         obj_id=token_data['user_id'],
-        obj_data={'email_is_confirmed': True},
-        obj_unique_check=False,
+        new_email=token_data['user_email'],
         session=session,
     )
     return JSONResponse(
