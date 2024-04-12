@@ -2,12 +2,12 @@
 Модуль с ORM моделями базы данных приложения "user".
 """
 
-from datetime import datetime
+from datetime import date, datetime
 from decimal import Decimal
 from typing import Optional, TYPE_CHECKING
 
 from sqladmin import ModelView
-from sqlalchemy import DateTime, DECIMAL, ForeignKey, String
+from sqlalchemy import Date, DateTime, DECIMAL, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import expression, func
 
@@ -17,6 +17,8 @@ from src.validators.user import (
     USER_HASH_PASS_LEN,
     USER_PHONE_LEN,
     USER_USERNAME_LEN,
+
+    USER_PAYMENT_DATA_CARD_NUMBER,
 
     USER_SALESMAN_COMPANY_DESCRIPTION_LEN,
     USER_SALESMAN_COMPANY_IMAGE_LEN,
@@ -108,6 +110,62 @@ class User(Base):
 
     def __str__(self) -> str:
         return f'{self.email} ({self.name_first} {self.name_last})'
+
+
+class UserAddress(Base):
+    """Декларативная модель представления адреса пользователя."""
+
+    __tablename__ = table_names.user_address
+
+    # Primary keys
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey(
+            column=f'{table_names.user}.id',
+            ondelete='CASCADE',
+        ),
+        comment='ID пользователя-продавца',
+        primary_key=True,
+    )
+
+    # Fields
+    # zip_code
+    # country
+    # city
+    # street
+    # building
+    # entrance
+    # floor
+    # appartment
+
+
+class UserPaymentData(Base):
+    """Декларативная модель представления платежных данных пользователя."""
+
+    __tablename__ = table_names.user_payment_data
+    __tableargs__ = {
+        'comment': 'Пользователи',
+    }
+
+    # Primary keys
+    id: Mapped[int] = mapped_column(
+        comment='ID',
+        primary_key=True,
+    )
+
+    # Columns
+    card_number: Mapped[str] = mapped_column(
+        String(length=USER_PAYMENT_DATA_CARD_NUMBER),
+        comment='номер банковской карты',
+    )
+    hashed_cvv: Mapped[Optional[str]] = mapped_column(
+        String(length=USER_HASH_PASS_LEN),
+        comment='хэш CVV',
+    )
+    expiration_date: Mapped[date] = mapped_column(
+        Date(),
+        comment='дата окончания срока действия банковской карты',
+        server_default=func.now(),
+    )
 
 
 class UserSalesman(Base):
