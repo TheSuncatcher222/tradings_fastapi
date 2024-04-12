@@ -55,7 +55,7 @@ USER_SALESMAN_COMPANY_IMAGE_LEN: int = 200
 USER_SALESMAN_COMPANY_NAME_LEN: int = 50
 
 
-def validate_description(cls, value: str, values: dict):
+def validate_user_company_description(cls, value: str, values: dict):
     """Производит валидацию описания компании."""
     if len(value) == 0 or len(value) > COMPANY_DESCRIPTION_MAX:
         raise ValueError(
@@ -64,16 +64,7 @@ def validate_description(cls, value: str, values: dict):
     return value
 
 
-def validate_email(value: str) -> str:
-    """
-    Переводит символы email в нижний регистр.
-
-    Валидация структуры email осуществляется автоматически в Pydantic.
-    """
-    return value.lower()
-
-
-def validate_company_name(value: str):
+def validate_user_company_name(value: str):
     """Производит валидацию названия компании продавца."""
     if len(value) == 0 or len(value) > COMPANY_NAME_MAX:
         raise ValueError(
@@ -82,7 +73,16 @@ def validate_company_name(value: str):
     return value
 
 
-def validate_password(value: str) -> str:
+def validate_user_email(value: str) -> str:
+    """
+    Переводит символы email в нижний регистр.
+
+    Валидация структуры email осуществляется автоматически в Pydantic.
+    """
+    return value.lower()
+
+
+def validate_user_password(value: str) -> str:
     """Производит валидацию пароля."""
     errors: list[str] = [
         err_message
@@ -98,7 +98,7 @@ def validate_password(value: str) -> str:
     return value
 
 
-def validate_phone(value: str) -> str:
+def validate_user_phone(value: str) -> str:
     """
     Производит валидацию номера телефона:
         - необходимо сохранять только цифры (т.е. без "+", " ", "-", "(", ")")

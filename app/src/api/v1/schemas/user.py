@@ -8,10 +8,11 @@ from typing import Optional
 from pydantic import BaseModel, EmailStr, validator
 
 from src.validators.user import (
-    validate_company_name,
-    validate_email,
-    validate_password,
-    validate_phone, validate_user_name,
+    validate_user_company_name,
+    validate_user_email,
+    validate_user_password,
+    validate_user_phone,
+    validate_user_name,
     USER_NAME_FIRST_ERROR,
     USER_NAME_LAST_ERROR,
 )
@@ -63,12 +64,12 @@ class UserUpdate(BaseModel):
 
         Валидация структуры email осуществляется автоматически в Pydantic.
         """
-        return validate_email(value=value)
+        return validate_user_email(value=value)
 
     @validator('phone')
     def validate_phone(cls, value: str) -> str:
         """Производит валидацию поля "phone"."""
-        return validate_phone(value=value)
+        return validate_user_phone(value=value)
 
 
 class UserRegister(BaseModel):
@@ -109,12 +110,12 @@ class UserRegister(BaseModel):
             - переводит символы поля email в нижний регистр.
             - валидация структуры email осуществляется автоматически в Pydantic.
         """
-        return validate_email(value=value)
+        return validate_user_email(value=value)
 
     @validator('password')
     def validate_password(cls, value: str) -> str:
         """Производит валидацию поля "password"."""
-        return validate_password(value=value)
+        return validate_user_password(value=value)
 
     @validator('phone')
     def validate_phone(cls, value: str) -> str:
@@ -126,7 +127,7 @@ class UserRegister(BaseModel):
         Валидное значение: 79112223344.
         Невалидное значение по всем критериям: +7 (911) 222-33-44.
         """
-        return validate_phone(value=value)
+        return validate_user_phone(value=value)
 
     @validator('company_name', always=True)
     def validate_company_name(cls, value: str, values: dict) -> str:
@@ -138,7 +139,7 @@ class UserRegister(BaseModel):
         """
         if not values.get('is_salesman'):
             return None
-        return validate_company_name(value=value)
+        return validate_user_company_name(value=value)
 
     @validator('description', always=True)
     def validate_description(cls, value: str, values: dict) -> str:
