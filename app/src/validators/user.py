@@ -26,6 +26,8 @@ USER_NAME_LAST_ERROR: str = (
 # INFO: src.models.user.USER_USERNAME_LEN = 25
 USER_NAME_MAX_REGEXP: str = r'^[А-ЯЁа-яё\s\-]{1,25}$'
 
+USER_PAYMENT_DATA_CARD_NUMBER: int = 4 * 4
+
 # INFO. Номера в БД хранятся в формате набора цифр без иных знаков.
 #       7 - это городской номер без кодов
 #       20 - существующее значение в БД, принят запас по длине.
