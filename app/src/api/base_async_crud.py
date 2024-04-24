@@ -18,10 +18,12 @@ class BaseAsyncCrud():
         self,
         *,
         model: Base,
+        object_not_found_err: str = 'Объект не найден',
         unique_columns: tuple[str] = None,
         unique_columns_err: str = 'Объект уже существует',
     ):
         self.model = model
+        self.object_not_found_err = object_not_found_err
         self.unique_columns_err = unique_columns_err
         self.unique_columns = unique_columns
 
@@ -61,7 +63,7 @@ class BaseAsyncCrud():
         if result is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail='Объект не найден',
+                detail=self.object_not_found_err,
             )
         return result
 
