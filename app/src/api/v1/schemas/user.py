@@ -3,6 +3,7 @@
 """
 
 from datetime import datetime
+from decimal import Decimal
 from typing import Optional
 
 from pydantic import BaseModel, EmailStr, validator
@@ -181,3 +182,23 @@ class UserRegister(BaseModel):
                 'Не заполнены все обязательные поля для организации: "company_name", "description"'
             )
         return True
+
+
+"""Схемы представления пользователей-продавцов."""
+
+
+class UserSalesmanCompanyForProductRepresent(BaseModel):
+    """Схема представления данных компании продавца в запросах к Product."""
+
+    company_name: str
+    image: str | None = None
+    rating: Decimal
+
+
+class UserSalesmanRepresentForProduct(BaseModel):
+    """Схема представления пользователя в запросах к Product."""
+
+    name_first: str
+    name_last: str
+    email: EmailStr
+    company: UserSalesmanCompanyForProductRepresent
