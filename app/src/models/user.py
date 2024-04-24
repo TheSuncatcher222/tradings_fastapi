@@ -26,6 +26,7 @@ from src.validators.user import (
 )
 
 if TYPE_CHECKING:
+    from src.models.address import Address
     from src.models.product import Product
 
 
@@ -94,13 +95,28 @@ class User(Base):
         server_default=func.now(),
     )
 
-    # Relations
+    # Relationship
+    address: Mapped['Address'] = relationship(
+        'Address',
+        back_populates='user',
+    )
     products: Mapped[list['Product']] = relationship(
         'Product',
         back_populates='salesman',
     )
     user_salesman: Mapped['UserSalesman'] = relationship(
         back_populates='user',
+    )
+
+    # Foreign keys
+    address_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey(
+            column=f'{table_names.address}.id',
+            ondelete='RESTRICT',
+        ),
+        comment='ID адреса',
+        nullable=True,
+        server_default=expression.null(),
     )
 
     @property
@@ -110,32 +126,6 @@ class User(Base):
 
     def __str__(self) -> str:
         return f'{self.email} ({self.name_first} {self.name_last})'
-
-
-class UserAddress(Base):
-    """Декларативная модель представления адреса пользователя."""
-
-    __tablename__ = table_names.user_address
-
-    # Primary keys
-    user_id: Mapped[int] = mapped_column(
-        ForeignKey(
-            column=f'{table_names.user}.id',
-            ondelete='CASCADE',
-        ),
-        comment='ID пользователя-продавца',
-        primary_key=True,
-    )
-
-    # Fields
-    # zip_code
-    # country
-    # city
-    # street
-    # building
-    # entrance
-    # floor
-    # appartment
 
 
 class UserPaymentData(Base):
