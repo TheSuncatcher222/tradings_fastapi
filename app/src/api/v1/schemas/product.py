@@ -2,12 +2,9 @@
 Модуль со схемами валидации данных через Pydantic в приложении "product".
 """
 
-from typing import TYPE_CHECKING
-
 from pydantic import BaseModel
 
-if TYPE_CHECKING:
-    from src.api.v1.schemas.user import UserRepresent
+from src.api.v1.schemas.user import UserSalesmanRepresentForProduct
 
 
 class ProductCategorySchema(BaseModel):
@@ -17,7 +14,17 @@ class ProductCategorySchema(BaseModel):
     title: str
 
 
-class ProductSchema(BaseModel):
+class ProductCreateSchema(BaseModel):
+    """Схема создания нового продукта."""
+
+    title: str
+    price: int
+    in_stock: int
+    sub_category_id: int
+    description: str
+
+
+class ProductRepresentSchema(BaseModel):
     """Схема представления товаров."""
 
     id: int
@@ -26,4 +33,4 @@ class ProductSchema(BaseModel):
     in_stock: int
     category: ProductCategorySchema
     description: str
-    salesman: UserRepresent
+    salesman: UserSalesmanRepresentForProduct
