@@ -7,10 +7,7 @@ from fastapi.responses import JSONResponse
 
 from src.api.v1.crud.feedback import feedback_v1_crud
 from src.api.v1.schemas.feedback import FeedbackSend
-from src.celery_app.celery_app import PRIOR_LOW
-from src.celery_app.feedback.tasks import send_feedback_to_mail
 from src.database.database import AsyncSession, get_async_session
-from src.models.feedback import Feedback
 
 router_feedback: APIRouter = APIRouter(
     prefix='/feedbacks',
