@@ -62,7 +62,7 @@ class Product(Base):
     # Foreign Keys
     sub_category_id: Mapped[int] = mapped_column(
         ForeignKey(
-            column=f'{table_names.product_sub_category}.product_category_id',
+            column=f'{table_names.product_sub_category}.id',
             ondelete='RESTRICT',
         ),
         comment='id под-категории товаров'
@@ -112,7 +112,7 @@ class ProductSubCategory(Base):
     }
 
     # Primary Keys
-    product_category_id: Mapped[int] = mapped_column(
+    id: Mapped[int] = mapped_column(
         ForeignKey(
             column=f'{table_names.product_category}.id',
             ondelete='RESTRICT',
