@@ -123,6 +123,34 @@ User-Agent: custom_vscode-restclient
 
 
 ##########################################################################
+############################### PRODUCTS #################################
+##########################################################################
+
+
+###
+GET http://127.0.0.1:8000/api/v1/products/ HTTP/1.1
+Accept-Language: en-US,en;q=0.8
+Accept-Language: ru-RU
+User-Agent: custom_vscode-restclient
+
+###
+POST http://127.0.0.1:8000/api/v1/products/ HTTP/1.1
+Accept-Language: en-US,en;q=0.8
+Accept-Language: ru-RU
+Authorization: Bearer jwt_token_access
+Content-Type: application/json
+User-Agent: custom_vscode-restclient
+
+{
+    "title": "Товар 1",
+    "price": "100",
+    "in_stock": "10",
+    "sub_category_id": 1,
+    "description": "Описание товара 1"
+}
+
+
+##########################################################################
 ################################# USERS ##################################
 ##########################################################################
 
