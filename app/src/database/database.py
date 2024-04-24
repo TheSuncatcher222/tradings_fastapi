@@ -48,6 +48,9 @@ class Base(DeclarativeBase):
 
 class TableNames():
     """Содержит в себе названия таблиц проекта."""
+    # address
+    address = 'table_address'
+    country = 'table_country'
     # auth
     used_pass_reset_token = 'table_used_pass_reset_token'
     # feedback
@@ -55,11 +58,10 @@ class TableNames():
     # product
     product = 'table_product'
     product_category = 'table_product_category'
-    product_sub_category = 'product_sub_category'
+    product_sub_category = 'table_product_sub_category'
     # user
     user = 'table_user'
-    user_address = 'user_address'
-    user_payment_data = 'user_payment_data'
+    user_payment_data = 'table_user_payment_data'
     user_salesman = 'table_user_salesman'
 
 
