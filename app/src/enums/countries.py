@@ -11,407 +11,7 @@ class Country():
     ...
 
 
-"""
-Afghanistan
-Albania
-Algeria
-Andorra
-Angola
-Antigua and Barbuda
-Argentina
-Armenia
-Australia
-Austria
-Azerbaijan
-The Bahamas
-Bahrain
-Bangladesh
-Barbados
-Belarus
-Belgium
-Belize
-Benin
-Bhutan
-Bolivia
-Bosnia and Herzegovina
-Botswana
-Brazil
-Brunei
-Bulgaria
-Burkina Faso
-Burundi
-Cabo Verde
-Cambodia
-Cameroon
-Canada
-Central African Republic
-Chad
-Chile
-China
-Colombia
-Comoros
-Congo, Democratic Republic of the
-Congo, Republic of the
-Costa Rica
-Côte d’Ivoire
-Croatia
-Cuba
-Cyprus
-Czech Republic
-Denmark
-Djibouti
-Dominica
-Dominican Republic
-East Timor (Timor-Leste)
-Ecuador
-Egypt
-El Salvador
-Equatorial Guinea
-Eritrea
-Estonia
-Eswatini
-Ethiopia
-Fiji
-Finland
-France
-Gabon
-The Gambia
-Georgia
-Germany
-Ghana
-Greece
-Grenada
-Guatemala
-Guinea
-Guinea-Bissau
-Guyana
-Haiti
-Honduras
-Hungary
-Iceland
-India
-Indonesia
-Iran
-Iraq
-Ireland
-Israel
-Italy
-Jamaica
-Japan
-Jordan
-Kazakhstan
-Kenya
-Kiribati
-Korea, North
-Korea, South
-Kosovo
-Kuwait
-Kyrgyzstan
-Laos
-Latvia
-Lebanon
-Lesotho
-Liberia
-Libya
-Liechtenstein
-Lithuania
-Luxembourg
-Madagascar
-Malawi
-Malaysia
-Maldives
-Mali
-Malta
-Marshall Islands
-Mauritania
-Mauritius
-Mexico
-Micronesia, Federated States of
-Moldova
-Monaco
-Mongolia
-Montenegro
-Morocco
-Mozambique
-Myanmar (Burma)
-Namibia
-Nauru
-Nepal
-Netherlands
-New Zealand
-Nicaragua
-Niger
-Nigeria
-North Macedonia
-Norway
-Oman
-Pakistan
-Palau
-Panama
-Papua New Guinea
-Paraguay
-Peru
-Philippines
-Poland
-Portugal
-Qatar
-Romania
-Russia
-Rwanda
-Saint Kitts and Nevis
-Saint Lucia
-Saint Vincent and the Grenadines
-Samoa
-San Marino
-Sao Tome and Principe
-Saudi Arabia
-Senegal
-Serbia
-Seychelles
-Sierra Leone
-Singapore
-Slovakia
-Slovenia
-Solomon Islands
-Somalia
-South Africa
-Spain
-Sri Lanka
-Sudan
-Sudan, South
-Suriname
-Sweden
-Switzerland
-Syria
-Taiwan
-Tajikistan
-Tanzania
-Thailand
-Togo
-Tonga
-Trinidad and Tobago
-Tunisia
-Turkey
-Turkmenistan
-Tuvalu
-Uganda
-Ukraine
-United Arab Emirates
-United Kingdom
-United States
-Uruguay
-Uzbekistan
-Vanuatu
-Vatican City
-Venezuela
-Vietnam
-Yemen
-Zambia
-Zimbabwe
-"""
-
-
-"""
-AFGHANISTAN: Афганистан
-ALBANIA: Албания
-ALGERIA: Алжир
-ANDORRA: Андорра
-ANGOLA: Ангола
-ANTIGUA_AND_BARBUDA: Антигуа и Барбуда
-ARGENTINA: Аргентина
-ARMENIA: Армения
-AUSTRALIA: Австралия
-AUSTRIA: Австрия
-AZERBAIJAN: Азербайджан
-THE_BAHAMAS: Багамские Острова
-BAHRAIN: Бахрейн
-BANGLADESH: Бангладеш
-BARBADOS: Барбадос
-BELARUS: Беларусь
-BELGIUM: Бельгия
-BELIZE: Белиз
-BENIN: Бенин
-BHUTAN: Бутан
-BOLIVIA: Боливия
-BOSNIA_AND_HERZEGOVINA: Босния и Герцеговина
-BOTSWANA: Ботсвана
-BRAZIL: Бразилия
-BRUNEI: Бруней
-BULGARIA: Болгария
-BURKINA_FASO: Буркина-Фасо
-BURUNDI: Бурунди
-CABO_VERDE: Кабо-Верде
-CAMBODIA: Камбоджа
-CAMEROON: Камерун
-CANADA: Канада
-CENTRAL_AFRICAN_REPUBLIC: Центральноафриканская Республика
-CHAD: Чад
-CHILE: Чили
-CHINA: Китай
-COLOMBIA: Колумбия
-COMOROS: Коморские Острова
-CONGO_DEMOCRATIC_REPUBLIC_OF_THE: Демократическая Республика Конго
-CONGO_REPUBLIC_OF_THE: Республика Конго
-COSTA_RICA: Коста-Рика
-COTE_D_IVOIRE: Кот-д’Ивуар
-CROATIA: Хорватия
-CUBA: Куба
-CYPRUS: Кипр
-CZECH_REPUBLIC: Чешская Республика
-DENMARK: Дания
-DJIBOUTI: Джибути
-DOMINICA: Доминика
-DOMINICAN_REPUBLIC: Доминиканская Республика
-EAST_TIMOR: Восточный Тимор
-ECUADOR: Эквадор
-EGYPT: Египет
-EL_SALVADOR: Сальвадор
-EQUATORIAL_GUINEA: Экваториальная Гвинея
-ERITREA: Эритрея
-ESTONIA: Эстония
-ESWATINI: Эсватини
-ETHIOPIA: Эфиопия
-FIJI: Фиджи
-FINLAND: Финляндия
-FRANCE: Франция
-GABON: Габон
-THE_GAMBIA: Гамбия
-GEORGIA: Грузия
-GERMANY: Германия
-GHANA: Гана
-GREECE: Греция
-GRENADA: Гренада
-GUATEMALA: Гватемала
-GUINEA: Гвинея
-GUINEA_BISSAU: Гвинея-Бисау
-GUYANA: Гайана
-HAITI: Гаити
-HONDURAS: Гондурас
-HUNGARY: Венгрия
-ICELAND: Исландия
-INDIA: Индия
-INDONESIA: Индонезия
-IRAN: Иран
-IRAQ: Ирак
-IRELAND: Ирландия
-ISRAEL: Израиль
-ITALY: Италия
-JAMAICA: Ямайка
-JAPAN: Япония
-JORDAN: Иордания
-KAZAKHSTAN: Казахстан
-KENYA: Кения
-KIRIBATI: Кирибати
-KOREA_NORTH: Корея, Северная
-KOREA_SOUTH: Корея, Южная
-KOSOVO: Косово
-KUWAIT: Кувейт
-KYRGYZSTAN: Киргизия
-LAOS: Лаос
-LATVIA: Латвия
-LEBANON: Ливан
-LESOTHO: Лесото
-LIBERIA: Либерия
-LIBYA: Ливия
-LIECHTENSTEIN: Лихтенштейн
-LITHUANIA: Литва
-LUXEMBOURG: Люксембург
-MADAGASCAR: Мадагаскар
-MALAWI: Малави
-MALAYSIA: Малайзия
-MALDIVES: Мальдивы
-MALI: Мали
-MALTA: Мальта
-MARSHALL_ISLANDS: Маршалловы Острова
-MAURITANIA: Мавритания
-MAURITIUS: Маврикий
-MEXICO: Мексика
-MICRONESIA_FEDERATED_STATES_OF: Микронезия, Федеративные Штаты
-MOLDOVA: Молдова
-MONACO: Монако
-MONGOLIA: Монголия
-MONTENEGRO: Черногория
-MOROCCO: Марокко
-MOZAMBIQUE: Мозамбик
-MYANMAR_BURMA: Мьянма (Бирма)
-NAMIBIA: Намибия
-NAURU: Науру
-NEPAL: Непал
-NETHERLANDS: Нидерланды
-NEW_ZEALAND: Новая Зеландия
-NICARAGUA: Никарагуа
-NIGER: Нигер
-NIGERIA: Нигерия
-NORTH_MACEDONIA: Северная Македония
-NORWAY: Норвегия
-OMAN: Оман
-PAKISTAN: Пакистан
-PALAU: Палау
-PANAMA: Панама
-PAPUA_NEW_GUINEA: Папуа-Новая Гвинея
-PARAGUAY: Парагвай
-PERU: Перу
-PHILIPPINES: Филиппины
-POLAND: Польша
-PORTUGAL: Португалия
-QATAR: Катар
-ROMANIA: Румыния
-RUSSIA: Россия
-RWANDA: Руанда
-SAINT_KITTS_AND_NEVIS: Сент-Китс и Невис
-SAINT_LUCIA: Сент-Люсия
-SAINT_VINCENT AND THE GRENADINES: Сент-Винсент и Гренадины
-SAMOA: Самоа
-SAN_MARINO: Сан-Марино
-SAO_TOME AND PRINCIPE: Сан-Томе и Принсипи
-SAUDI_ARABIA: Саудовская Аравия
-SENEGAL: Сенегал
-SERBIA: Сербия
-SEYCHELLES: Сейшельские Острова
-SIERRA_LEONE: Сьерра-Леоне
-SINGAPORE: Сингапур
-SLOVAKIA: Словакия
-SLOVENIA: Словения
-SOLOMON_ISLANDS: Соломоновы Острова
-SOMALIA: Сомали
-SOUTH_AFRICA: Южная Африка
-SPAIN: Испания
-SRI LANKA: Шри-Ланка
-SUDAN: Судан
-SUDAN_SOUTH: Южный Судан
-SURINAME: Суринам
-SWEDEN: Швеция
-SWITZERLAND: Швейцария
-SYRIA: Сирия
-TAIWAN: Тайвань
-TAJIKISTAN: Таджикистан
-TANZANIA: Танзания
-THAILAND: Таиланд
-TOGO: Того
-TONGA: Тонга
-TRINIDAD_AND_TOBAGO: Тринидад и Тобаго
-TUNISIA: Тунис
-TURKEY: Турция
-TURKMENISTAN: Туркменистан
-TUVALU: Тувалу
-UGANDA: Уганда
-UKRAINE: Украина
-UNITED_ARAB_EMIRATES: Объединенные Арабские Эмираты
-UNITED_KINGDOM: Великобритания
-UNITED_STATES: Соединенные Штаты
-URUGUAY: Уругвай
-UZBEKISTAN: Узбекистан
-VANUATU: Вануату
-VATICAN_CITY: Ватикан
-VENEZUELA: Венесуэла
-VIETNAM: Вьетнам
-YEMEN: Йемен
-ZAMBIA: Замбия
-ZIMBABWE: Зимбабве
-"""
-
-"""
-countries_dict = {
+COUNTRIES_DICT: dict[str, dict[str, int | str]] = {
     "AFGHANISTAN": {
         "id": 1,
         "title_eng": "Afghanistan",
@@ -481,7 +81,7 @@ countries_dict = {
     "THE BAHAMAS": {
         "id": 12,
         "title_eng": "The Bahamas",
-        "title_rus": "Багамы",
+        "title_rus": "Багамские Острова",
         "code": "BHS"
     },
     "BAHRAIN": {
@@ -637,7 +237,7 @@ countries_dict = {
     "COMOROS": {
         "id": 38,
         "title_eng": "Comoros",
-        "title_rus": "Коморы",
+        "title_rus": "Коморские Острова",
         "code": "COM"
     },
     "CONGO, DEMOCRATIC REPUBLIC OF THE": {
@@ -661,7 +261,7 @@ countries_dict = {
     "CÔTE D’IVOIRE": {
         "id": 42,
         "title_eng": "Côte d’Ivoire",
-        "title_rus": "Кот-д'Ивуар",
+        "title_rus": "Кот-д’Ивуар",
         "code": "CIV"
     },
     "CROATIA": {
@@ -685,7 +285,7 @@ countries_dict = {
     "CZECH REPUBLIC": {
         "id": 46,
         "title_eng": "Czech Republic",
-        "title_rus": "Чешская Республика",
+        "title_rus": "Чехия",
         "code": "CZE"
     },
     "DENMARK": {
@@ -790,7 +390,7 @@ countries_dict = {
         "title_rus": "Габон",
         "code": "GAB"
     },
-        "THE GAMBIA": {
+    "THE GAMBIA": {
         "id": 64,
         "title_eng": "The Gambia",
         "title_rus": "Гамбия",
@@ -982,4 +582,809 @@ countries_dict = {
         "title_rus": "Киргизия",
         "code": "KGZ"
     },
-"""
+    "LAOS": {
+        "id": 96,
+        "title_eng": "Laos",
+        "title_rus": "Лаос",
+        "code": "LAO"
+    },
+    "LATVIA": {
+        "id": 97,
+        "title_eng": "Latvia",
+        "title_rus": "Латвия",
+        "code": "LVA"
+    },
+    "LEBANON": {
+        "id": 98,
+        "title_eng": "Lebanon",
+        "title_rus": "Ливан",
+        "code": "LBN"
+    },
+    "LESOTHO": {
+        "id": 99,
+        "title_eng": "Lesotho",
+        "title_rus": "Лесото",
+        "code": "LSO"
+    },
+    "LIBERIA": {
+        "id": 100,
+        "title_eng": "Liberia",
+        "title_rus": "Либерия",
+        "code": "LBR"
+    },
+    "LIBYA": {
+        "id": 101,
+        "title_eng": "Libya",
+        "title_rus": "Ливия",
+        "code": "LBY"
+    },
+    "LIECHTENSTEIN": {
+        "id": 102,
+        "title_eng": "Liechtenstein",
+        "title_rus": "Лихтенштейн",
+        "code": "LIE"
+    },
+    "LITHUANIA": {
+        "id": 103,
+        "title_eng": "Lithuania",
+        "title_rus": "Литва",
+        "code": "LTU"
+    },
+    "LUXEMBOURG": {
+        "id": 104,
+        "title_eng": "Luxembourg",
+        "title_rus": "Люксембург",
+        "code": "LUX"
+    },
+    "MADAGASCAR": {
+        "id": 105,
+        "title_eng": "Madagascar",
+        "title_rus": "Мадагаскар",
+        "code": "MDG"
+    },
+    "MALAWI": {
+        "id": 106,
+        "title_eng": "Malawi",
+        "title_rus": "Малави",
+        "code": "MWI"
+    },
+    "MALAYSIA": {
+        "id": 107,
+        "title_eng": "Malaysia",
+        "title_rus": "Малайзия",
+        "code": "MYS"
+    },
+    "MALDIVES": {
+        "id": 108,
+        "title_eng": "Maldives",
+        "title_rus": "Мальдивы",
+        "code": "MDV"
+    },
+    "MALI": {
+        "id": 109,
+        "title_eng": "Mali",
+        "title_rus": "Мали",
+        "code": "MLI"
+    },
+    "MALTA": {
+        "id": 110,
+        "title_eng": "Malta",
+        "title_rus": "Мальта",
+        "code": "MLT"
+    },
+    "MARSHALL ISLANDS": {
+        "id": 111,
+        "title_eng": "Marshall Islands",
+        "title_rus": "Маршалловы Острова",
+        "code": "MHL"
+    },
+    "MAURITANIA": {
+        "id": 112,
+        "title_eng": "Mauritania",
+        "title_rus": "Мавритания",
+        "code": "MRT"
+    },
+    "MAURITIUS": {
+        "id": 113,
+        "title_eng": "Mauritius",
+        "title_rus": "Маврикий",
+        "code": "MUS"
+    },
+    "MEXICO": {
+        "id": 114,
+        "title_eng": "Mexico",
+        "title_rus": "Мексика",
+        "code": "MEX"
+    },
+    "MICRONESIA, FEDERATED STATES OF": {
+        "id": 115,
+        "title_eng": "Micronesia, Federated States of",
+        "title_rus": "Микронезия, Федеративные Штаты",
+        "code": "FSM"
+    },
+    "MOLDOVA": {
+        "id": 116,
+        "title_eng": "Moldova",
+        "title_rus": "Молдова",
+        "code": "MDA"
+    },
+    "MONACO": {
+        "id": 117,
+        "title_eng": "Monaco",
+        "title_rus": "Монако",
+        "code": "MCO"
+    },
+    "MONGOLIA": {
+        "id": 118,
+        "title_eng": "Mongolia",
+        "title_rus": "Монголия",
+        "code": "MNG"
+    },
+    "MONTENEGRO": {
+        "id": 119,
+        "title_eng": "Montenegro",
+        "title_rus": "Черногория",
+        "code": "MNE"
+    },
+    "MOROCCO": {
+        "id": 120,
+        "title_eng": "Morocco",
+        "title_rus": "Марокко",
+        "code": "MAR"
+    },
+    "MOZAMBIQUE": {
+        "id": 121,
+        "title_eng": "Mozambique",
+        "title_rus": "Мозамбик",
+        "code": "MOZ"
+    },
+    "MYANMAR (BURMA)": {
+        "id": 122,
+        "title_eng": "Myanmar (Burma)",
+        "title_rus": "Мьянма (Бирма)",
+        "code": "MMR"
+    },
+    "NAMIBIA": {
+        "id": 123,
+        "title_eng": "Namibia",
+        "title_rus": "Намибия",
+        "code": "NAM"
+    },
+    "NAURU": {
+        "id": 124,
+        "title_eng": "Nauru",
+        "title_rus": "Науру",
+        "code": "NRU"
+    },
+    "NEPAL": {
+        "id": 125,
+        "title_eng": "Nepal",
+        "title_rus": "Непал",
+        "code": "NPL"
+    },
+    "NETHERLANDS": {
+        "id": 126,
+        "title_eng": "Netherlands",
+        "title_rus": "Нидерланды",
+        "code": "NLD"
+    },
+    "NEW ZEALAND": {
+        "id": 127,
+        "title_eng": "New Zealand",
+        "title_rus": "Новая Зеландия",
+        "code": "NZL"
+    },
+    "NICARAGUA": {
+        "id": 128,
+        "title_eng": "Nicaragua",
+        "title_rus": "Никарагуа",
+        "code": "NIC"
+    },
+    "NIGER": {
+        "id": 129,
+        "title_eng": "Niger",
+        "title_rus": "Нигер",
+        "code": "NER"
+    },
+    "NIGERIA": {
+        "id": 130,
+        "title_eng": "Nigeria",
+        "title_rus": "Нигерия",
+        "code": "NGA"
+    },
+    "NORTH MACEDONIA": {
+        "id": 131,
+        "title_eng": "North Macedonia",
+        "title_rus": "Северная Македония",
+        "code": "MKD"
+    },
+    "NORWAY": {
+        "id": 132,
+        "title_eng": "Norway",
+        "title_rus": "Норвегия",
+        "code": "NOR"
+    },
+    "OMAN": {
+        "id": 133,
+        "title_eng": "Oman",
+        "title_rus": "Оман",
+        "code": "OMN"
+    },
+    "PAKISTAN": {
+        "id": 134,
+        "title_eng": "Pakistan",
+        "title_rus": "Пакистан",
+        "code": "PAK"
+    },
+    "PALAU": {
+        "id": 135,
+        "title_eng": "Palau",
+        "title_rus": "Палау",
+        "code": "PLW"
+    },
+    "PANAMA": {
+        "id": 136,
+        "title_eng": "Panama",
+        "title_rus": "Панама",
+        "code": "PAN"
+    },
+    "PAPUA NEW GUINEA": {
+        "id": 137,
+        "title_eng": "Papua New Guinea",
+        "title_rus": "Папуа — Новая Гвинея",
+        "code": "PNG"
+    },
+    "PARAGUAY": {
+        "id": 138,
+        "title_eng": "Paraguay",
+        "title_rus": "Парагвай",
+        "code": "PRY"
+    },
+    "PERU": {
+        "id": 139,
+        "title_eng": "Peru",
+        "title_rus": "Перу",
+        "code": "PER"
+    },
+    "PHILIPPINES": {
+        "id": 140,
+        "title_eng": "Philippines",
+        "title_rus": "Филиппины",
+        "code": "PHL"
+    },
+    "POLAND": {
+        "id": 141,
+        "title_eng": "Poland",
+        "title_rus": "Польша",
+        "code": "POL"
+    },
+    "PORTUGAL": {
+        "id": 142,
+        "title_eng": "Portugal",
+        "title_rus": "Португалия",
+        "code": "PRT"
+    },
+    "QATAR": {
+        "id": 143,
+        "title_eng": "Qatar",
+        "title_rus": "Катар",
+        "code": "QAT"
+    },
+    "ROMANIA": {
+        "id": 144,
+        "title_eng": "Romania",
+        "title_rus": "Румыния",
+        "code": "ROU"
+    },
+    "RUSSIA": {
+        "id": 145,
+        "title_eng": "Russia",
+        "title_rus": "Россия",
+        "code": "RUS"
+    },
+    "RWANDA": {
+        "id": 146,
+        "title_eng": "Rwanda",
+        "title_rus": "Руанда",
+        "code": "RWA"
+    },
+    "SAINT KITTS AND NEVIS": {
+        "id": 147,
+        "title_eng": "Saint Kitts and Nevis",
+        "title_rus": "Сент-Китс и Невис",
+        "code": "KNA"
+    },
+    "SAINT LUCIA": {
+        "id": 148,
+        "title_eng": "Saint Lucia",
+        "title_rus": "Сент-Люсия",
+        "code": "LCA"
+    },
+    "SAINT VINCENT AND THE GRENADINES": {
+        "id": 149,
+        "title_eng": "Saint Vincent and the Grenadines",
+        "title_rus": "Сент-Винсент и Гренадины",
+        "code": "VCT"
+    },
+    "SAMOA": {
+        "id": 150,
+        "title_eng": "Samoa",
+        "title_rus": "Самоа",
+        "code": "WSM"
+    },
+    "SAN MARINO": {
+        "id": 151,
+        "title_eng": "San Marino",
+        "title_rus": "Сан-Марино",
+        "code": "SMR"
+    },
+    "SAO TOME AND PRINCIPE": {
+        "id": 152,
+        "title_eng": "Sao Tome and Principe",
+        "title_rus": "Сан-Томе и Принсипи",
+        "code": "STP"
+    },
+    "SAUDI ARABIA": {
+        "id": 153,
+        "title_eng": "Saudi Arabia",
+        "title_rus": "Саудовская Аравия",
+        "code": "SAU"
+    },
+    "SENEGAL": {
+        "id": 154,
+        "title_eng": "Senegal",
+        "title_rus": "Сенегал",
+        "code": "SEN"
+    },
+    "SERBIA": {
+        "id": 155,
+        "title_eng": "Serbia",
+        "title_rus": "Сербия",
+        "code": "SRB"
+    },
+    "SEYCHELLES": {
+        "id": 156,
+        "title_eng": "Seychelles",
+        "title_rus": "Сейшельские Острова",
+        "code": "SYC"
+    },
+    "SIERRA LEONE": {
+        "id": 157,
+        "title_eng": "Sierra Leone",
+        "title_rus": "Сьерра-Леоне",
+        "code": "SLE"
+    },
+    "SINGAPORE": {
+        "id": 158,
+        "title_eng": "Singapore",
+        "title_rus": "Сингапур",
+        "code": "SGP"
+    },
+    "SLOVAKIA": {
+        "id": 159,
+        "title_eng": "Slovakia",
+        "title_rus": "Словакия",
+        "code": "SVK"
+    },
+    "SLOVENIA": {
+        "id": 160,
+        "title_eng": "Slovenia",
+        "title_rus": "Словения",
+        "code": "SVN"
+    },
+    "SOLOMON ISLANDS": {
+        "id": 161,
+        "title_eng": "Solomon Islands",
+        "title_rus": "Соломоновы Острова",
+        "code": "SLB"
+    },
+    "SOMALIA": {
+        "id": 162,
+        "title_eng": "Somalia",
+        "title_rus": "Сомали",
+        "code": "SOM"
+    },
+    "SOUTH AFRICA": {
+        "id": 163,
+        "title_eng": "South Africa",
+        "title_rus": "ЮАР",
+        "code": "ZAF"
+    },
+    "SPAIN": {
+        "id": 164,
+        "title_eng": "Spain",
+        "title_rus": "Испания",
+        "code": "ESP"
+    },
+    "SRI LANKA": {
+        "id": 165,
+        "title_eng": "Sri Lanka",
+        "title_rus": "Шри-Ланка",
+        "code": "LKA"
+    },
+    "SUDAN": {
+        "id": 166,
+        "title_eng": "Sudan",
+        "title_rus": "Судан",
+        "code": "SDN"
+    },
+    "SUDAN, SOUTH": {
+        "id": 167,
+        "title_eng": "Sudan, South",
+        "title_rus": "Южный Судан",
+        "code": "SSD"
+    },
+    "SURINAME": {
+        "id": 168,
+        "title_eng": "Suriname",
+        "title_rus": "Суринам",
+        "code": "SUR"
+    },
+    "SWEDEN": {
+        "id": 169,
+        "title_eng": "Sweden",
+        "title_rus": "Швеция",
+        "code": "SWE"
+    },
+    "SWITZERLAND": {
+        "id": 170,
+        "title_eng": "Switzerland",
+        "title_rus": "Швейцария",
+        "code": "CHE"
+    },
+    "SYRIA": {
+        "id": 171,
+        "title_eng": "Syria",
+        "title_rus": "Сирия",
+        "code": "SYR"
+    },
+    "TAIWAN": {
+        "id": 172,
+        "title_eng": "Taiwan",
+        "title_rus": "Тайвань",
+        "code": "TWN"
+    },
+    "TAJIKISTAN": {
+        "id": 173,
+        "title_eng": "Tajikistan",
+        "title_rus": "Таджикистан",
+        "code": "TJK"
+    },
+    "TANZANIA": {
+        "id": 174,
+        "title_eng": "Tanzania",
+        "title_rus": "Танзания",
+        "code": "TZA"
+    },
+    "THAILAND": {
+        "id": 175,
+        "title_eng": "Thailand",
+        "title_rus": "Таиланд",
+        "code": "THA"
+    },
+    "TOGO": {
+        "id": 176,
+        "title_eng": "Togo",
+        "title_rus": "Того",
+        "code": "TGO"
+    },
+    "TONGA": {
+        "id": 177,
+        "title_eng": "Tonga",
+        "title_rus": "Тонга",
+        "code": "TON"
+    },
+    "TRINIDAD AND TOBAGO": {
+        "id": 178,
+        "title_eng": "Trinidad and Tobago",
+        "title_rus": "Тринидад и Тобаго",
+        "code": "TTO"
+    },
+    "TUNISIA": {
+        "id": 179,
+        "title_eng": "Tunisia",
+        "title_rus": "Тунис",
+        "code": "TUN"
+    },
+    "TURKEY": {
+        "id": 180,
+        "title_eng": "Turkey",
+        "title_rus": "Турция",
+        "code": "TUR"
+    },
+    "TURKMENISTAN": {
+        "id": 181,
+        "title_eng": "Turkmenistan",
+        "title_rus": "Туркменистан",
+        "code": "TKM"
+    },
+    "TUVALU": {
+        "id": 182,
+        "title_eng": "Tuvalu",
+        "title_rus": "Тувалу",
+        "code": "TUV"
+    },
+    "UGANDA": {
+        "id": 183,
+        "title_eng": "Uganda",
+        "title_rus": "Уганда",
+        "code": "UGA"
+    },
+    "UKRAINE": {
+        "id": 184,
+        "title_eng": "Ukraine",
+        "title_rus": "Украина",
+        "code": "UKR"
+    },
+    "UNITED ARAB EMIRATES": {
+        "id": 185,
+        "title_eng": "United Arab Emirates",
+        "title_rus": "ОАЭ",
+        "code": "ARE"
+    },
+    "UNITED KINGDOM": {
+        "id": 186,
+        "title_eng": "United Kingdom",
+        "title_rus": "Великобритания",
+        "code": "GBR"
+    },
+    "UNITED STATES": {
+        "id": 187,
+        "title_eng": "United States",
+        "title_rus": "США",
+        "code": "USA"
+    },
+    "URUGUAY": {
+        "id": 188,
+        "title_eng": "Uruguay",
+        "title_rus": "Уругвай",
+        "code": "URY"
+    },
+    "UZBEKISTAN": {
+        "id": 189,
+        "title_eng": "Uzbekistan",
+        "title_rus": "Узбекистан",
+        "code": "UZB"
+    },
+    "VANUATU": {
+        "id": 190,
+        "title_eng": "Vanuatu",
+        "title_rus": "Вануату",
+        "code": "VUT"
+    },
+    "VATICAN CITY": {
+        "id": 191,
+        "title_eng": "Vatican City",
+        "title_rus": "Ватикан",
+        "code": "VAT"
+    },
+    "VENEZUELA": {
+        "id": 192,
+        "title_eng": "Venezuela",
+        "title_rus": "Венесуэла",
+        "code": "VEN"
+    },
+    "VIETNAM": {
+        "id": 193,
+        "title_eng": "Vietnam",
+        "title_rus": "Вьетнам",
+        "code": "VNM"
+    },
+    "YEMEN": {
+        "id": 194,
+        "title_eng": "Yemen",
+        "title_rus": "Йемен",
+        "code": "YEM"
+    },
+    "ZAMBIA": {
+        "id": 195,
+        "title_eng": "Zambia",
+        "title_rus": "Замбия",
+        "code": "ZMB"
+    },
+    "ZIMBABWE": {
+        "id": 196,
+        "title_eng": "Zimbabwe",
+        "title_rus": "Зимбабве",
+        "code": "ZWE"
+    }
+}
+
+COUNTRIES_LIST: list[str] = [
+    "Afghanistan",
+    "Albania",
+    "Algeria",
+    "Andorra",
+    "Angola",
+    "Antigua and Barbuda",
+    "Argentina",
+    "Armenia",
+    "Australia",
+    "Austria",
+    "Azerbaijan",
+    "The Bahamas",
+    "Bahrain",
+    "Bangladesh",
+    "Barbados",
+    "Belarus",
+    "Belgium",
+    "Belize",
+    "Benin",
+    "Bhutan",
+    "Bolivia",
+    "Bosnia and Herzegovina",
+    "Botswana",
+    "Brazil",
+    "Brunei",
+    "Bulgaria",
+    "Burkina Faso",
+    "Burundi",
+    "Cabo Verde",
+    "Cambodia",
+    "Cameroon",
+    "Canada",
+    "Central African Republic",
+    "Chad",
+    "Chile",
+    "China",
+    "Colombia",
+    "Comoros",
+    "Congo, Democratic Republic of the",
+    "Congo, Republic of the",
+    "Costa Rica",
+    "Côte d’Ivoire",
+    "Croatia",
+    "Cuba",
+    "Cyprus",
+    "Czech Republic",
+    "Denmark",
+    "Djibouti",
+    "Dominica",
+    "Dominican Republic",
+    "East Timor (Timor-Leste)",
+    "Ecuador",
+    "Egypt",
+    "El Salvador",
+    "Equatorial Guinea",
+    "Eritrea",
+    "Estonia",
+    "Eswatini",
+    "Ethiopia",
+    "Fiji",
+    "Finland",
+    "France",
+    "Gabon",
+    "The Gambia",
+    "Georgia",
+    "Germany",
+    "Ghana",
+    "Greece",
+    "Grenada",
+    "Guatemala",
+    "Guinea",
+    "Guinea-Bissau",
+    "Guyana",
+    "Haiti",
+    "Honduras",
+    "Hungary",
+    "Iceland",
+    "India",
+    "Indonesia",
+    "Iran",
+    "Iraq",
+    "Ireland",
+    "Israel",
+    "Italy",
+    "Jamaica",
+    "Japan",
+    "Jordan",
+    "Kazakhstan",
+    "Kenya",
+    "Kiribati",
+    "Korea, North",
+    "Korea, South",
+    "Kosovo",
+    "Kuwait",
+    "Kyrgyzstan",
+    "Laos",
+    "Latvia",
+    "Lebanon",
+    "Lesotho",
+    "Liberia",
+    "Libya",
+    "Liechtenstein",
+    "Lithuania",
+    "Luxembourg",
+    "Madagascar",
+    "Malawi",
+    "Malaysia",
+    "Maldives",
+    "Mali",
+    "Malta",
+    "Marshall Islands",
+    "Mauritania",
+    "Mauritius",
+    "Mexico",
+    "Micronesia, Federated States of",
+    "Moldova",
+    "Monaco",
+    "Mongolia",
+    "Montenegro",
+    "Morocco",
+    "Mozambique",
+    "Myanmar (Burma)",
+    "Namibia",
+    "Nauru",
+    "Nepal",
+    "Netherlands",
+    "New Zealand",
+    "Nicaragua",
+    "Niger",
+    "Nigeria",
+    "North Macedonia",
+    "Norway",
+    "Oman",
+    "Pakistan",
+    "Palau",
+    "Panama",
+    "Papua New Guinea",
+    "Paraguay",
+    "Peru",
+    "Philippines",
+    "Poland",
+    "Portugal",
+    "Qatar",
+    "Romania",
+    "Russia",
+    "Rwanda",
+    "Saint Kitts and Nevis",
+    "Saint Lucia",
+    "Saint Vincent and the Grenadines",
+    "Samoa",
+    "San Marino",
+    "Sao Tome and Principe",
+    "Saudi Arabia",
+    "Senegal",
+    "Serbia",
+    "Seychelles",
+    "Sierra Leone",
+    "Singapore",
+    "Slovakia",
+    "Slovenia",
+    "Solomon Islands",
+    "Somalia",
+    "South Africa",
+    "Spain",
+    "Sri Lanka",
+    "Sudan",
+    "Sudan, South",
+    "Suriname",
+    "Sweden",
+    "Switzerland",
+    "Syria",
+    "Taiwan",
+    "Tajikistan",
+    "Tanzania",
+    "Thailand",
+    "Togo",
+    "Tonga",
+    "Trinidad and Tobago",
+    "Tunisia",
+    "Turkey",
+    "Turkmenistan",
+    "Tuvalu",
+    "Uganda",
+    "Ukraine",
+    "United Arab Emirates",
+    "United Kingdom",
+    "United States",
+    "Uruguay",
+    "Uzbekistan",
+    "Vanuatu",
+    "Vatican City",
+    "Venezuela",
+    "Vietnam",
+    "Yemen",
+    "Zambia",
+    "Zimbabwe",
+]
