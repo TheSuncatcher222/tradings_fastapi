@@ -5,7 +5,7 @@ from sqlalchemy.sql import select, update
 from sqlalchemy.sql.dml import Update
 from sqlalchemy.sql.selectable import Select
 
-from src.api.base_async_crud import BaseAsyncCrud
+from src.database.base_async_crud import BaseAsyncCrud
 from src.database.database import AsyncSession
 from src.models.user import User
 from src.utils.email_confirm import send_email_confirm_code
@@ -20,7 +20,7 @@ class UserV1Crud(BaseAsyncCrud):
         self,
         *,
         obj_email: str,
-        session: AsyncSession
+        session: AsyncSession,
     ) -> User:
         """Получает один объект User из базы данных по указанному email."""
         query: Select = (
@@ -40,7 +40,7 @@ class UserV1Crud(BaseAsyncCrud):
         *,
         obj_email: str,
         obj_raw_password: str,
-        session: AsyncSession
+        session: AsyncSession,
     ) -> User:
         """Получает один объект User из базы данных по указанному email и password."""
         query: Select = (
@@ -124,7 +124,7 @@ class UserV1Crud(BaseAsyncCrud):
                 {
                     'email': new_email,
                     'email_is_confirmed': True,
-                }
+                },
             )
         )
         await session.execute(stmt)

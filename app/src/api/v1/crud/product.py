@@ -1,7 +1,7 @@
 """Модуль с классом CRUD запросов в базу данных для модели Product."""
 
 from src.database.database import AsyncSession, Base
-from src.api.base_async_crud import BaseAsyncCrud
+from src.database.base_async_crud import BaseAsyncCrud
 from src.models.product import Product, ProductSubCategory
 from src.models.user import User
 
@@ -30,7 +30,7 @@ class ProductV1Crud(BaseAsyncCrud):
         *,
         obj_values: dict[str, any],
         user: User,
-        session: AsyncSession
+        session: AsyncSession,
     ) -> Base:
         # await product_sub_category_v1_crud.retrieve_by_id(
         #     obj_id=obj_values['sub_category_id'],
@@ -57,5 +57,5 @@ product_v1_crud = ProductV1Crud(
     #       одинаковые товары и/или их названия.
     #       Но у одного продавца не должно быть
     #       одинаковых товаров и товаров с одинаковыми названиями.
-    unique_columns=('title', 'salesman_id',),
+    unique_columns=('title', 'salesman_id'),
 )
