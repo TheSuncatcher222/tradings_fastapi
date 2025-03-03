@@ -10,7 +10,7 @@ from src.config.config import settings
 SALT: bytes = (settings.SALT).encode(settings.PASS_ENCODE)
 
 
-async def hash_password(raw_password: str) -> str:
+def hash_password(raw_password: str) -> str:
     """Создает хэш пароля для сохранения в базе данных."""
     hashed_password: str = str(
         # TODO: перейти на passlib
@@ -20,6 +20,6 @@ async def hash_password(raw_password: str) -> str:
             password=raw_password.encode(settings.PASS_ENCODE),
             salt=SALT,
             iterations=settings.ITERATIONS,
-        )
+        ),
     )
     return hashed_password
