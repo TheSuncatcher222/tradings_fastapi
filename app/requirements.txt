@@ -1,31 +1,41 @@
 # Alembic
-alembic==1.13.1
-pydantic[email]
-pydantic-settings
+alembic~=1.13                       # Для контроля миграций в базе данных.
 
 # Celery + Redis
-celery[redis]==5.3.6
-flower
-
-# Database
-asyncpg==0.29.0
-psycopg2-binary==2.9.9
-sqlalchemy==2.0.25
+celery[redis]~=5.4                  # Для обработки фоновых задач в Celery.
+flower~=2.0                         # Для просмотра задач в Celery.
 
 # FastAPI
-fastapi==0.109.0
-sqladmin[full]
-python-multipart  # Для взаимодействия с multipart файлами в request body.
-requests
-uvicorn[standard]==0.27.0
+fastapi~=0.111                      # Для создания API.
+fastapi-cache2[redis]~=0.2          # Для кэширования данных в FastAPI.
+sqladmin[full]~=0.20                # Admin интерфейс для БД.
+python-multipart~=0.0               # Для взаимодействия с multipart файлами в request body.
 
-# HTTP utils.
-httpx  # Для обещения микросервисов по API.
+# HTTP connection utils.
+httpx~=0.27                         # Для создания асинхронных HTTP запросов.
 
-# Tests.
-colorlog
-flake8
+# Gateway.
+uvicorn[standard]~=0.30             # Для запуска FastAPI.
+
+# Logs.
+python-json-logger~=2.0             # Для логирования в JSON формате.
+
+# PEP8.
+flake8~=7.1                         # Для проверки стиля кода.
+pre-commit~=4.0                     # Для проверки стиля кода.
+
+# PostgreSQL
+asyncpg~=0.29                       # Для работы с PostgreSQL в асинхронном режиме.
+sqlalchemy~=2.0                     # ORM.
+
+# Pydantic.
+pydantic[email]~=2.10               # Для валидации данных.
+pydantic-settings~=2.8              # Для загрузки переменных окружения из .env файлов.
 
 # Security.
-itsdangerous==2.1.2
-python-jose[cryptography]==3.3.0
+itsdangerous~=2.2                   # Для (де)шифрования данных.
+python-jose[cryptography]~=3.3      # Для работы с JWT токенами.
+
+# Testing
+pytest~=8.3                         # Для тестирования кода.
+pytest-asyncio~=0.25                # Плагин асинхронных тестов для Pytest.
