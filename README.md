@@ -31,10 +31,10 @@ ___
 
 ### ТЕХНОЛОГИИ
 
-CleanPRO разработан с использованием следующих технологий:
+Tradings разработан с использованием следующих технологий:
 
-- [Python] (v.3.11) - целевой язык программирования backend
-- [FastAPI] (v.0.109) - высокоуровневый асинхронный веб-фреймворк
+- [Python] (v.3.12) - целевой язык программирования backend
+- [FastAPI] (v.0.111) - высокоуровневый асинхронный веб-фреймворк
 - [Alembic] (v.1.13) - инструмент для миграций базы данных для SQLAlchemy
 - [SQLAlchemy] (v.2.0) - SQL ORM реляционный преобразователь объектов
 - [PostgreSQL] (v.13.10) - объектно-реляционная база данных
@@ -56,60 +56,76 @@ ___
 
 ### РАЗВЕРТКА
 
-✅ Загрузить актуальную версию проекта
+1) Склонировать репозиторий
 
 ```
 git clone git@github.com:TheSuncatcher222/tradings_fastapi.git
 ```
 
-✅ Перейти в директорию конфигураций проекта config:
+2) Создать .env файл по шаблону
 
 ```
-cd app/src/config
+cp app/src/config/.env.example app/src/config/.env
 ```
 
-✅ Создать файл переменных окружения из примера
+[опционально] настроить .env согласно комментариям
 
 ```
-cp .env.example .env
+nano app/src/config/.env
 ```
 
-✅ Изменить переменные окружения (если необходимо)
+3) Запустить Docker Compose сборку (убедитесь, что `docker daemon` запущен в системе!)
+
+- prod build:
 
 ```
-(на примере редактора Nano)
-nano .env
+git checkout main
+docker compose -f docker/docker-compose.yml --env-file app/src/config/.env up -d
 ```
 
-✅ Перейти в директорию docker
+4) Проверить доступность API по ссылке на документацию:
 
 ```
-cd ../../../docker
+http://localhost:8000/api/v1/swagger/
 ```
 
-✅ Создать файл переменных окружения из примера
+### РАЗРАБОТКА
+
+❗️ ВНИМАНИЕ: некоторые библиотеки проекта не поддерживают Python выше 12 версии❗️
+
+1) Перейти в корень проекта (где находится README.md) и выполнить команды (на примере Windows):
 
 ```
-cp .env.example .env
+py -3.12 -m venv .venv &&
+source .venv/scripts/activate &&
+python -m pip install --upgrade pip &&
+pip install -r app/requirements.txt &&
+pre-commit install
 ```
 
-✅ Изменить переменные окружения (если необходимо)
+2) Подключение к БД:
+
+- Перейти в PG Admin:
 
 ```
-(на примере редактора Nano)
-nano .env
+http://localhost:5050/browser/
 ```
 
-✅ Запустить Docker (убедитесь, что `docker daemon` запущен в системе!)
+- Использовать логин и пароль из .env:
 
 ```
-docker-compose up --build
+PGADMIN_DEFAULT_EMAIL=admin@email.com
+PGADMIN_DEFAULT_PASSWORD=admin
 ```
 
-✅ Проверить доступность проекта на `localhost:8000`
+- Нажать "Servers" (ПКМ) -> "Register" -> "Server..."
 
 ```
-http://localhost:8000/
+"Name" = "tradings"
+"Host name/address" = "tradings-postgresql" (DB_HOST в .env)
+"Username" = "db_user" (POSTGRES_USER в .env)
+"Password" = "db_pass" (POSTGRES_PASSWORD в .env)
+"Save password?" = "yes"
 ```
 
 ___
