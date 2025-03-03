@@ -1,0 +1,12 @@
+# Environment.
+.venv
+
+# Media.
+*.jpg
+*.png
+*.docx
+*.pdf
+
+# Python cache.
+__pycache__
+.pyc
