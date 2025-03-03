@@ -5,17 +5,11 @@ from datetime import datetime
 from sqlalchemy.sql import select
 from sqlalchemy.sql.selectable import Select
 
-from src.api.base_async_crud import BaseAsyncCrud
+from src.database.base_async_crud import BaseAsyncCrud
 from src.database.database import AsyncSession
 from src.models.auth import UsedPassResetToken
 
 
-# TODO. Запретить прочие методы:
-#           - retrieve_all
-#           - retrieve_by_id
-#           - retrieve_by_ids
-#           - update_by_id
-#           - delete_by_id
 class UsedPassResetTokenV1Crud(BaseAsyncCrud):
     """Класс CRUD запросов к базе данных к таблице UsedPassResetToken."""
 
