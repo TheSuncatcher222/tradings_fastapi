@@ -2,111 +2,93 @@
 Модуль с задачами для Celery в приложении "auth".
 """
 
-from datetime import datetime
 
-from sqlalchemy.sql.selectable import Select
-from sqlalchemy.sql import delete
-
-from src.models.auth import UsedPassResetToken
-from src.celery_app.celery_app import celery_app
-from src.database.database import sync_session_maker
-from src.config.config import settings
-from src.utils.email import send_mail
+from app.src.celery_app.celery_app import (
+    CeleryPriority,
+    celery_app,
+)
+from app.src.config.config import settings
+from app.src.utils.email_sending import send_mail
 
 
-# TODO: вынести в CRUD.
-@celery_app.task(name='src.celery_app.auth.tasks.delete_expired_pass_reset_tokens')
-def delete_expired_pass_reset_tokens():
-    """
-    Удаляет использованные токены восстановления
-    пароля с истекшим сроком жизни.
-    """
-    with sync_session_maker() as session:
-        stmt: Select = delete(
-            UsedPassResetToken,
-        ).where(
-            UsedPassResetToken.exp_date < datetime.utcnow(),
-        )
-        session.execute(stmt)
-        session.commit()
-    return
+# TODO. Вынести сообщения в HTML шаблон.
 
 
-@celery_app.task
-def send_email_confirm_code_to_email(
+@celery_app.task(
+    name='src.celery_app.auth.tasks.send_email_confirm_code_to_email_task',
+    ignore_result=True,
+    priority=CeleryPriority.MEDIUM,
+)
+def send_email_confirm_code_to_email_task(
     user_full_name: str,
     url_email_confirm: str,
-    to_email: str
+    to_email: str,
 ) -> None:
     """Отправляет сообщение для подтверждения электронной почты пользователю."""
-    # TODO: вынести в константы и использовать .format()
+    subject: str = f'Регистрация в {settings.DOMAIN_NAME}'
     content: str = (
-        f'Здравствуйте, {user_full_name}.'
+        f'Добрый день, {user_full_name}.'
         '\n\n'
-        f'Благодарим за регистрацию на {settings.DOMAIN_NAME}!'
+        f'Спасибо за регистрацию на {settings.DOMAIN_NAME}!'
         '\n\n'
-        'Для подтверждения вашей электронной почты и начала работы '
-        'с вашей учетной записью, пожалуйста, перейдите по ссылке ниже:'
-        '\n\n'
+        'Чтобы подтвердить вашу электронную почту, перейдите по следующей ссылке:'
+        '\n'
         f'{url_email_confirm}.'
         '\n\n'
-        'Если вы не регистрировались на {settings.DOMAIN_NAME}, просто проигнорируйте '
-        'данное сообщение.'
+        'Если вы не создавали аккаунт, просто игнорируйте это сообщение.'
         '\n\n'
-        'С уважением,'
+        'С наилучшими пожеланиями,'
         '\n'
-        f'Служба поддержки {settings.DOMAIN_NAME}'
+        f'Команда поддержки {settings.DOMAIN_NAME}'
     )
-    subject: str = f'Подтверждение электронной почты | {settings.DOMAIN_NAME}'
     send_mail(subject=subject, to=to_email, content=content)
     return
 
 
-@celery_app.task
-def send_password_restore_to_mail(link: str, to_email: str) -> None:
+@celery_app.task(
+    name='src.celery_app.auth.tasks.send_password_restore_to_mail_task',
+    ignore_result=True,
+    priority=CeleryPriority.MEDIUM,
+)
+def send_password_restore_to_mail_task(link: str, to_email: str) -> None:
     """Отправляет сообщение c ссылкой восстановления пароля пользователю."""
-    # TODO: вынести в константы и использовать .format()
+    subject: str = f'Сброс пароля аккаунта'
     content: str = (
-        'Здравствуйте,'
+        'Добрый день,'
         '\n\n'
-        f'Вы запросили сброс пароля для вашей учетной записи на {settings.DOMAIN_NAME}. '
-        'Для завершения процесса, пожалуйста, перейдите по следующей ссылке:'
-        '\n\n'
+        f'Вы запросили восстановление доступа к аккаунту на {settings.DOMAIN_NAME}. '
+        'Чтобы продолжить, пожалуйста, воспользуйтесь следующей ссылкой в течении 24 часов:'
+        '\n'
         f'{link}'
         '\n\n'
-        'Ссылка будет действительна в течении 24 часов.'
+        'Если вы не запрашивали сброс пароля, просто проигнорируйте это письмо. '
+        'Также рекомендуем в этом случае сменить пароль учетной записи.'
         '\n\n'
-        'После перехода по ссылке вы сможете установить новый пароль '
-        'для вашей учетной записи.'
-        '\n\n'
-        'Если вы не инициировали этот запрос, пожалуйста, проигнорируйте '
-        'это сообщение или свяжитесь с нами в ответом письме.'
-        '\n\n'
-        'С уважением,'
+        'С наилучшими пожеланиями,'
         '\n'
-        f'Служба поддержки {settings.DOMAIN_NAME}'
+        f'Команда поддержки {settings.DOMAIN_NAME}'
     )
-    subject: str = f'Сброс пароля учетной записи | {settings.DOMAIN_NAME}'
     send_mail(subject=subject, to=to_email, content=content)
     return
 
 
-@celery_app.task
-def send_password_has_changed_to_mail(user_full_name: str, to_email: str) -> None:
+@celery_app.task(
+    name='src.celery_app.auth.tasks.send_password_has_changed_to_mail_task',
+    ignore_result=True,
+    priority=CeleryPriority.MOST_IMPORTANT,
+)
+def send_password_has_changed_to_mail_task(user_full_name: str, to_email: str) -> None:
     """Отправляет сообщение-оповещение о смене пароля пользователю."""
-    # TODO: вынести в константы и использовать .format()
+    subject: str = f'Изменение пароля аккаунта'
     content: str = (
-        f'Здравствуйте, {user_full_name}.'
+        f'Добрый день, {user_full_name}.'
         '\n\n'
-        'Уведомляем, что пароль для вашей учетной записи был только что изменен.'
+        'Ваш пароль аккаунта был успешно изменён. Если вы не выполняли '
+        'этого действия, пожалуйста, срочно свяжитесь с нами.'
         '\n\n'
-        'Если вы не инициировали этот запрос, пожалуйста, немедленно '
-        'свяжитесь с нами в ответом письме.'
-        '\n\n'
-        'С уважением,'
+        'С наилучшими пожеланиями,'
         '\n'
-        f'Служба поддержки {settings.DOMAIN_NAME}'
+        f'Команда поддержки {settings.DOMAIN_NAME}'
     )
-    subject: str = f'Изменение пароля учетной записи | {settings.DOMAIN_NAME}'
     send_mail(subject=subject, to=to_email, content=content)
     return
