@@ -20,9 +20,9 @@ from sqlalchemy.sql.dml import (
 )
 from sqlalchemy.sql.selectable import Select
 
-from app.src.config.config import Pagination
-from app.src.database.database import Base
-from app.src.utils.datetime_calc import datetime_now_utc
+from src.config.config import Pagination
+from src.database.database import Base
+from src.utils.datetime_calc import datetime_now_utc
 
 
 class BaseSyncCrud():

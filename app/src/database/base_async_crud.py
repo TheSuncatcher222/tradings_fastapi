@@ -19,16 +19,16 @@ from sqlalchemy.sql.dml import (
 )
 from sqlalchemy.sql.selectable import Select
 
-from app.src.config.config import Pagination
-from app.src.database.database import (
+from src.config.config import Pagination
+from src.database.database import (
     AsyncSession,
     Base,
 )
-from app.src.utils.custom_exception import (
+from src.utils.custom_exception import (
     CustomValidationTypes,
     form_pydantic_like_validation_error,
 )
-from app.src.utils.datetime_calc import datetime_now_utc
+from src.utils.datetime_calc import datetime_now_utc
 
 
 class BaseAsyncCrud():
