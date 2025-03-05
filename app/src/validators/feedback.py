@@ -1,13 +1,16 @@
 """
-Модуль с валидаторами полей моделей базы данных приложения "feedback".
+Модуль с валидаторами приложения "feedback".
 """
 
-FEEDBACK_CONTACTS_LEN: int = 50
-FEEDBACK_MESSAGE_LEN: int = 200
-FEEDBACK_USERNAME_LEN: int = 50
 
-TICKET_SUBJECT_MAX_LEN: str = 50
-TICKET_TEXT_MAX_LEN: str = 200
+class FeedbackParams:
+    """Класс с параметрами формы обратной связи пользователей."""
+
+    CONTACTS_LEN_MAX: int = 50
+    FILE_LEN_MAX: int = 255
+    MESSAGE_LEN_MAX: int = 200
+    SUBJECT_LEN_MAX: str = 50
+    USERNAME_LEN_MAX: int = 50
 
 
 def validate_feedback_contacts(value: str) -> str:
@@ -16,18 +19,8 @@ def validate_feedback_contacts(value: str) -> str:
 
     Производит проверку только по длине.
     """
-    if value is not None and len(value) > FEEDBACK_CONTACTS_LEN:
+    if value is not None and len(value) > FeedbackParams.CONTACTS_LEN_MAX:
         raise ValueError('Укажите корректные контактные данные')
-    return value
-
-
-def validate_feedback_data_process_approve(value: bool) -> str:
-    """Производит валидацию поля 'data_process_approve'."""
-    if not value:
-        raise ValueError(
-            'Для отправки обращения необходимо согласиться '
-            'с обработкой персональных данных'
-        )
     return value
 
 
@@ -43,10 +36,10 @@ def validate_feedback_email(value: str) -> str:
 def validate_feedback_message(value: str) -> str:
     """Производит валидацию поля 'message'."""
     value_len: int = len(value)
-    if value_len > FEEDBACK_MESSAGE_LEN:
+    if value_len > FeedbackParams.MESSAGE_LEN_MAX:
         raise ValueError(
-            f'Текст обращения превышает {FEEDBACK_MESSAGE_LEN} символов '
-            f'(сейчас {value_len})'
+            f'Текст обращения превышает {FeedbackParams.MESSAGE_LEN_MAX} символов '
+            f'(сейчас {value_len})',
         )
     return value
 
@@ -54,37 +47,37 @@ def validate_feedback_message(value: str) -> str:
 def validate_feedback_username(value: str) -> str:
     """Производит валидацию поля 'username'."""
     value_len: int = len(value)
-    if value_len > FEEDBACK_USERNAME_LEN:
+    if value_len > FeedbackParams.USERNAME_LEN_MAX:
         raise ValueError(
-            f'Имя превышает допустимую длину в {FEEDBACK_USERNAME_LEN} символов '
-            f'(сейчас {value_len} символов)'
+            f'Имя превышает допустимую длину в {FeedbackParams.USERNAME_LEN_MAX} символов '
+            f'(сейчас {value_len} символов)',
         )
     return value
 
 
-def validate_ticket_subject(value: str) -> str:
+def validate_feedback_subject(value: str) -> str:
     """Производит валидацию поля 'subject'."""
     if len(value) == 0:
         raise ValueError(
-            'Укажите тему обращения'
+            'Укажите тему обращения',
         )
-    if len(value) > TICKET_SUBJECT_MAX_LEN:
+    if len(value) > FeedbackParams.SUBJECT_LEN_MAX:
         raise ValueError(
-            f'Тема обращения не должна превышать {TICKET_SUBJECT_MAX_LEN} символов '
-            f'(сейчас {len(value)})'
+            f'Тема обращения не должна превышать {FeedbackParams.SUBJECT_LEN_MAX} символов '
+            f'(сейчас {len(value)})',
         )
     return value
 
 
-def validate_ticket_text(value: str) -> str:
+def validate_feedback_text(value: str) -> str:
     """Производит валидацию поля 'text'."""
     if len(value) == 0:
         raise ValueError(
-            'Укажите текст обращения'
+            'Укажите текст обращения',
         )
-    if len(value) > TICKET_TEXT_MAX_LEN:
+    if len(value) > FeedbackParams.TEXT_LEN_MAX:
         raise ValueError(
-            f'Текст обращения не должен превышать {TICKET_TEXT_MAX_LEN} символов '
-            f'(сейчас {len(value)})'
+            f'Текст обращения не должен превышать {FeedbackParams.TEXT_LEN_MAX} символов '
+            f'(сейчас {len(value)})',
         )
     return value
