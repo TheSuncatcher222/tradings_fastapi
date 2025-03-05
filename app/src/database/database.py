@@ -4,10 +4,16 @@
 
 from typing import AsyncGenerator
 
+from redis import Redis
 from sqlalchemy import create_engine
-from sqlalchemy.orm import DeclarativeBase, sessionmaker
+from sqlalchemy.orm import (
+    DeclarativeBase,
+    sessionmaker,
+)
 from sqlalchemy.ext.asyncio import (
-    AsyncEngine, AsyncSession, async_sessionmaker,
+    AsyncEngine,
+    AsyncSession,
+    async_sessionmaker,
     create_async_engine,
 )
 
@@ -43,7 +49,6 @@ sync_session_maker: sessionmaker = sessionmaker(bind=sync_engine)
 
 class Base(DeclarativeBase):
     """Инициализирует фабрику создания декларативных классов моделей."""
-    pass
 
 
 class TableNames():
@@ -58,11 +63,40 @@ class TableNames():
     # product
     product = 'table_product'
     product_category = 'table_product_category'
-    product_sub_category = 'table_product_sub_category'
     # user
     user = 'table_user'
-    user_payment_data = 'table_user_payment_data'
+    user_bank_card = 'table_user_bank_card'
     user_salesman = 'table_user_salesman'
 
 
-table_names = TableNames()
+class RedisKeys:
+    """
+    Класс представления Redis ключей.
+
+    INFO. Лучше не превышать длину ключа в 255 символа.
+    """
+
+    __PREFIX: str = 'tradings_app_cache_'
+
+    # Auth
+    __PREFIX_AUTH: str = __PREFIX + 'auth_'
+    AUTH_USER_BAD_LOGIN_COUNT: str = __PREFIX_AUTH + 'user_bad_login_count_' + '{user_email}'
+    USED_PASSWORD_RESET_TOKEN: str = __PREFIX_AUTH + 'used_password_reset_token_' + '{reset_token}'
+
+
+    @classmethod
+    def all_keys(cls) -> tuple[str]:
+        # TODO. Нужно взять из Redis все текущие ключи по факту.
+        return (
+            # cls.AUTH_USER_BAD_LOGIN_COUNT,
+            # cls.USED_PASSWORD_RESET_TOKEN,
+            cls.SERVICE_PRICE_LIST_DICT,
+        )
+
+
+redis_engine: Redis = Redis(
+    host=settings.REDIS_HOST,
+    port=settings.REDIS_PORT,
+    db=settings.REDIS_DB_CACHE,
+    decode_responses=True,
+)
