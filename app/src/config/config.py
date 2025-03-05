@@ -6,13 +6,43 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 DIR_SRC: Path = Path(__file__).parent.parent
 DIR_MEDIA: Path = Path(DIR_SRC, 'media')
+# INFO. Для хранения email сообщений локально при DEBUG_EMAIL==True.
+DIR_EMAIL_LOCAL: Path = Path(DIR_MEDIA, 'email_local')
+
+
+class Pagination:
+    """Класс представления параметров пагинации."""
+
+    LIMIT_DEFAULT: int = 15
+    OFFSET_DEFAULT: int = 0
+
+
+class TimeIntervals:
+    """Класс представления таймаутов."""
+
+    # Seconds.
+
+    SECONDS_10: int = 10
+    SECONDS_IN_1_MINUTE: int = 60
+    SECONDS_IN_5_MINUTES: int = SECONDS_IN_1_MINUTE * 5
+    SECONDS_IN_1_HOUR: int = SECONDS_IN_1_MINUTE * 60
+    SECONDS_IN_1_DAY: int = SECONDS_IN_1_HOUR * 24
+
+    # Days.
+
+    DAYS_IN_1_MONTH: int = 30
+
+    # Hours.
+
+    HOURS_IN_1_DAY: int = 24
+    HOURS_IN_1_MONTH: int = HOURS_IN_1_DAY * DAYS_IN_1_MONTH
 
 
 class Settings(BaseSettings):
     """
     Класс представления переменных окружения.
 
-    Описание переменных указано в .env.example файле.
+    Пояснения к переменным окружения содержатся в app/src/config/.env.example
     """
 
     model_config = SettingsConfigDict(
@@ -21,46 +51,47 @@ class Settings(BaseSettings):
         extra="allow",
     )
 
-    """Данные проекта."""
-    DOMAIN_IP: str
-    DOMAIN_NAME: str
-
     """Настройки базы данных PostgreSQL."""
-    DB_HOST: str = 'tradings_postgresql_host'
-    DB_PORT: int = 5432
-    POSTGRES_DB: str = 'tradings_db'
-    POSTGRES_PASSWORD: str = 'db_pass'
-    POSTGRES_USER: str = 'db_user'
-
-    """Настройки SQLAlchemy Admin."""
-    ADMIN_PASSWORD: str = 'admin'
-    ADMIN_SECRET_KEY: str = 'string'
-    ADMIN_URL: str = 'admin'
-    ADMIN_USERNAME: str = 'admin'
+    DB_HOST: str
+    DB_PORT: int
+    POSTGRES_DB: str
+    POSTGRES_PASSWORD: str
+    POSTGRES_USER: str
 
     """Настройки базы данных Redis."""
-    REDIS_HOST: str = 'tradings_redis_host'
-    REDIS_PORT: int = '6379'
-    REDIS_DB_CELERY_BACKEND: int = 0
-    REDIS_DB_CELERY_BROKER: int = 1
+    REDIS_HOST: str
+    REDIS_PORT: int
+    REDIS_DB_CELERY_BACKEND: int
+    REDIS_DB_CELERY_BROKER: int
+    REDIS_DB_CACHE: int
+    REDIS_DB_CACHE_FASTAPI: int
+
+    """Настройки SQLAlchemy Admin."""
+    ADMIN_USERNAME: str
+    ADMIN_PASSWORD: str
+    ADMIN_SECRET_KEY: str
+
+    """Настройки безопасности: тротлинг."""
+    BAD_LOGIN_BAN_SEC: int
+    BAD_LOGIN_MAX_ATTEMPTS: int
+    BAD_LOGIN_EXPIRATION_SEC: int
 
     """Настройки безопасности: шифрование пароля."""
-    HASH_NAME: str = 'md5'
-    ITERATIONS: int = 1000
-    PASS_ENCODE: str = 'ASCII'
-    SALT: str = 'string'
+    HASH_NAME: str
+    ITERATIONS: int
+    PASS_ENCODE: str
+    SALT: str
+
+    """Настройки безопасности: Dangerous токены."""
+    SECRET_KEY: str
 
     """Настройки безопасности: JWT токены."""
     COOKIE_KEY_JWT_REFRESH: str = 'refresh'
-    JWT_ALGORITHM: str = 'HS128'
-    JWT_ACCESS_EXPIRATION_SEC: int = 60
-    JWT_REFRESH_EXPIRATION_SEC: int = 86400
+    JWT_ALGORITHM: str
+    JWT_ACCESS_EXPIRATION_SEC: int
+    JWT_REFRESH_EXPIRATION_SEC: int
     JWT_TYPE_ACCESS: str = 'access'
     JWT_TYPE_REFRESH: str = 'refresh'
-
-    """Настройки безопасности: Dangerous токены."""
-    ONE_DAY_SEC: int = 60 * 60 * 24
-    SECRET_KEY: str = 'string'
 
     """Настройки почтового клиента SMTP."""
     SMTP_HOST: str
@@ -71,9 +102,15 @@ class Settings(BaseSettings):
     SUPPORT_EMAIL_TO: str
 
     """Настройки сервера."""
-    DEBUG: bool = True
-    DEBUG_DB: bool = True
-    DEBUG_EMAIL: bool = True
+    ADMIN_URL_PREFIX: str
+    DEBUG: bool
+    DEBUG_CORS: bool
+    DEBUG_DB: bool
+    DEBUG_EMAIL: bool
+    DEBUG_LOGGING: bool
+    DOMAIN_IP: str
+    DOMAIN_NAME: str
+    WORKERS_AMOUNT: int
 
 
 settings = Settings()
