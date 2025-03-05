@@ -10,7 +10,7 @@ from logging import (
 
 from pythonjsonlogger.jsonlogger import JsonFormatter
 
-from app.src.config.config import settings
+from src.config.config import settings
 
 LOGGER_FORMAT_DEFAULT: str = (
     # INFO. Время создания записи лога в формате 'YYYY-MM-DD HH:MM:SS,MS'.
@@ -100,6 +100,11 @@ LoggerJsonAuth: Logger = LoggerJson(
 
 LoggerJsonEmail: Logger = LoggerJson(
     logger_name='Email',
+    log_min_level=LOG_LEVEL_DEFAULT,
+).logger
+
+LoggerJsonFeedback: Logger = LoggerJson(
+    logger_name='Feedback',
     log_min_level=LOG_LEVEL_DEFAULT,
 ).logger
 

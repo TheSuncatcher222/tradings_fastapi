@@ -19,7 +19,7 @@
 
 import json
 
-from app.src.database.database import redis_engine
+from src.database.database import redis_engine
 
 
 def redis_delete(key: str) -> None:

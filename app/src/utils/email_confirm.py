@@ -16,7 +16,7 @@ async def generate_email_confirm_code(user_id: int, user_email: str) -> str:
         data={
             'user_id': user_id,
             'user_email': user_email,
-        }
+        },
     )
 
 
@@ -32,7 +32,6 @@ async def send_email_confirm_code(
     )
 
     if settings.DEBUG_EMAIL:
-        user_email: str = settings.SUPPORT_EMAIL_TO
         url_email_confirm: str = (
             f'http://127.0.0.1:8000/api/v1/auth/email-confirm/{confirm_code}'
         )

@@ -1,10 +1,11 @@
 from src.models.address import Address
-from src.models.auth import UsedPassResetToken
 from src.models.feedback import (
     Feedback, FeedbackAdmin,
 )
 from src.models.product import (
     Product, ProductAdmin,
+)
+from src.models.product_category import (
     ProductCategory, ProductCategoryAdmin,
 )
 from src.models.user import (
@@ -16,14 +17,13 @@ __all__ = (
     # Models:
     #   - address
     'Address',
-    #   - auth
-    'UsedPassResetToken',
     #   - feedback
     'Feedback',
     'FeedbackAdmin',
     #   - product
     'Product',
     'ProductAdmin',
+    #   - product category
     'ProductCategory',
     'ProductCategoryAdmin',
     #   - user

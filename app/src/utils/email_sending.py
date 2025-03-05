@@ -8,16 +8,16 @@ import smtplib
 from pathlib import Path
 from typing import Sequence
 
-from app.src.config.config import (
+from src.config.config import (
     settings,
     DIR_EMAIL_LOCAL,
 )
-from app.src.utils.datetime_calc import datetime_now_utc
-from app.src.utils.logger_json import (
+from src.utils.datetime_calc import datetime_now_utc
+from src.utils.logger_json import (
     Logger,
     LoggerJsonEmail,
 )
-from app.src.utils.storage import parse_file_info
+from src.utils.storage import parse_file_info
 
 logger: Logger = LoggerJsonEmail
 
@@ -53,7 +53,7 @@ def send_mail(
 
     errors: None | dict[str, str] = None
     try:
-        if settings.DEBUG_EMAIL_SAVE_LOCAL:
+        if settings.DEBUG_EMAIL:
             __save_email_to_local_file(email=email)
         elif settings.SMTP_PROTOCOL == 'TLS':
             with smtplib.SMTP(host=settings.SMTP_HOST, port=settings.SMTP_PORT) as smtp:

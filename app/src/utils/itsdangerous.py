@@ -9,11 +9,11 @@ from itsdangerous import (
     BadSignature,
 )
 
-from app.src.config.config import (
+from src.config.config import (
     TimeIntervals,
     settings,
 )
-from app.src.utils.logger_json import (
+from src.utils.logger_json import (
     Logger,
     LoggerJsonAuth,
 )

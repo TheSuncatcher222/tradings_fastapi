@@ -18,7 +18,7 @@ from src.models import (
     UserAdmin,
     UserSalesmanAdmin,
 )
-from src.utils.auth import get_current_admin_payload
+from src.utils.auth import get_admin_payload
 from src.utils.jwt import jwt_generate_pair
 
 admin_views: list[Base] = [
@@ -60,7 +60,7 @@ class AdminAuth(AuthenticationBackend):
             return await request.form()
 
         try:
-            await get_current_admin_payload(token=token)
+            await get_admin_payload(token=token)
         except HTTPException:
             return await request.form()
 
