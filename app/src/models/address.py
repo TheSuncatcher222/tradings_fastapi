@@ -1,13 +1,24 @@
 """
 Модуль с ORM моделями базы данных стран и адресов.
 """
+
 from typing import TYPE_CHECKING
 
-from sqlalchemy import ForeignKey, String
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import (
+    ForeignKey,
+    String,
+)
+from sqlalchemy.orm import (
+    Mapped,
+    mapped_column,
+    relationship,
+)
 from sqlalchemy.sql import expression
 
-from src.database.database import Base, table_names
+from src.database.database import (
+    Base,
+    TableNames,
+)
 
 ADDRESS_BUILDING_LEN: int = 8
 ADDRESS_CITY_LEN: int = 128
@@ -25,7 +36,7 @@ if TYPE_CHECKING:
 class Address(Base):
     """Декларативная модель представления адреса."""
 
-    __tablename__ = table_names.address
+    __tablename__ = TableNames.address
 
     # Primary keys
     id: Mapped[int] = mapped_column(
@@ -33,28 +44,17 @@ class Address(Base):
     )
 
     # Fields
-    zip_code: Mapped[str] = mapped_column(
-        String(length=ADDRESS_ZIP_CODE_LEN),
-        comment='почтовый индекс',
-    )
-    country: Mapped[int] = mapped_column(
-        ForeignKey(
-            column=f'{table_names.country}.id',
-            ondelete='RESTRICT',
-        ),
-        comment='ID страны',
-    )
-    city: Mapped[str] = mapped_column(
-        String(length=ADDRESS_CITY_LEN),
-        comment='название города',
-    )
-    street: Mapped[str] = mapped_column(
-        String(length=ADDRESS_STREET_LEN),
-        comment='название улицы',
+    apartment: Mapped[int] = mapped_column(
+        comment='номер квартиры',
+        server_default=expression.null(),
     )
     building: Mapped[str] = mapped_column(
         String(length=ADDRESS_BUILDING_LEN),
         comment='номер дома',
+    )
+    city: Mapped[str] = mapped_column(
+        String(length=ADDRESS_CITY_LEN),
+        comment='название города',
     )
     entrance: Mapped[int] = mapped_column(
         comment='номер подъезда',
@@ -65,38 +65,52 @@ class Address(Base):
         comment='номер этажа',
         server_default=expression.null(),
     )
-    apartment: Mapped[int] = mapped_column(
-        comment='номер квартиры',
-        server_default=expression.null(),
+    street: Mapped[str] = mapped_column(
+        String(length=ADDRESS_STREET_LEN),
+        comment='название улицы',
+    )
+    zip_code: Mapped[str] = mapped_column(
+        String(length=ADDRESS_ZIP_CODE_LEN),
+        comment='почтовый индекс',
+    )
+
+    # Foreign keys
+    country_id: Mapped[int] = mapped_column(
+        ForeignKey(
+            column=f'{TableNames.country}.id',
+            name=f'{TableNames.address}_{TableNames.country}_fkey',
+            ondelete='RESTRICT',
+        ),
+        comment='ID страны',
     )
 
     # Relationships
+    country: Mapped['Country'] = relationship()
     user: Mapped['User'] = relationship(
         back_populates='address',
     )
 
     def __str__(self) -> str:
-        address: str = (
-            f'{self.zip_code}, '
-            # TODO. Сделать через словарь поиск названия страны по ID.
-            # f'{self.country}, '
-            f'г. {self.city}, '
-            f'ул. {self.street}, '
-            f'д. {self.building}'
-        )
+        parts = [
+            f'{self.zip_code}',
+            f'{self.country.title_rus}',
+            f'г. {self.city}',
+            f'ул. {self.street}',
+            f'д. {self.building}',
+        ]
         if self.entrance:
-            address += f', парадная {self.entrance}'
+            parts.append(f'парадная {self.entrance}')
         if self.floor:
-            address += f', этаж {self.floor}'
+            parts.append(f'этаж {self.floor}')
         if self.apartment:
-            address += f', кв. {self.apartment}'
-        return address
+            parts.append(f'кв. {self.apartment}')
+        return ', '.join(parts)
 
 
 class Country(Base):
-    """Декларативная модель представления пользователя."""
+    """Декларативная модель представления страны."""
 
-    __tablename__ = table_names.country
+    __tablename__ = TableNames.country
     __tableargs__ = {
         'comment': 'Страны',
     }
@@ -110,14 +124,14 @@ class Country(Base):
         String(length=3),
         comment='трехбуквенный код страны',
     )
-    name_eng: Mapped[str] = mapped_column(
+    title_eng: Mapped[str] = mapped_column(
         String(length=COUNTRY_NAME_ENG_LEN),
         comment='страна на английском',
     )
-    name_rus: Mapped[str] = mapped_column(
+    title_rus: Mapped[str] = mapped_column(
         String(length=COUNTRY_NAME_RUS_LEN),
         comment='название страны на русском',
     )
 
     def __str__(self) -> str:
-        return self.name_rus
+        return self.code
