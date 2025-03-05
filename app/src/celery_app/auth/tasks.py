@@ -3,12 +3,12 @@
 """
 
 
-from app.src.celery_app.celery_app import (
+from src.celery_app.celery_app import (
     CeleryPriority,
     celery_app,
 )
-from app.src.config.config import settings
-from app.src.utils.email_sending import send_mail
+from src.config.config import settings
+from src.utils.email_sending import send_mail
 
 
 # TODO. Вынести сообщения в HTML шаблон.
