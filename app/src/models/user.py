@@ -2,27 +2,42 @@
 Модуль с ORM моделями базы данных приложения "user".
 """
 
-from datetime import date, datetime
+from datetime import (
+    date,
+    datetime,
+)
 from decimal import Decimal
-from typing import Optional, TYPE_CHECKING
+from typing import (
+    Optional,
+    TYPE_CHECKING,
+)
 
 from sqladmin import ModelView
-from sqlalchemy import Date, DateTime, DECIMAL, ForeignKey, String
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.sql import expression, func
+from sqlalchemy import (
+    Date,
+    DateTime,
+    DECIMAL,
+    ForeignKey,
+    String,
+)
+from sqlalchemy.orm import (
+    Mapped,
+    mapped_column,
+    relationship,
+)
+from sqlalchemy.sql import (
+    expression,
+    func,
+)
 
-from src.database.database import Base, table_names
+from src.database.database import (
+    Base,
+    TableNames,
+)
 from src.validators.user import (
-    USER_EMAIL_LEN,
-    USER_HASH_PASS_LEN,
-    USER_PHONE_LEN,
-    USER_USERNAME_LEN,
-
-    USER_PAYMENT_DATA_CARD_NUMBER,
-
-    USER_SALESMAN_COMPANY_DESCRIPTION_LEN,
-    USER_SALESMAN_COMPANY_IMAGE_LEN,
-    USER_SALESMAN_COMPANY_NAME_LEN,
+    CompanyParams,
+    UserBankCardParams,
+    UserParams,
 )
 
 if TYPE_CHECKING:
@@ -33,7 +48,7 @@ if TYPE_CHECKING:
 class User(Base):
     """Декларативная модель представления пользователя."""
 
-    __tablename__ = table_names.user
+    __tablename__ = TableNames.user
     __tableargs__ = {
         'comment': 'Пользователи',
     }
@@ -46,7 +61,7 @@ class User(Base):
 
     # Columns
     email: Mapped[str] = mapped_column(
-        String(length=USER_EMAIL_LEN),
+        String(length=UserParams.EMAIL_LEN_MAX),
         comment='email',
         unique=True,
     )
@@ -62,25 +77,20 @@ class User(Base):
         comment='статус администратора',
         server_default=expression.false(),
     )
-    is_salesman: Mapped[bool] = mapped_column(
-        comment='статус продавца',
-        server_default=expression.false(),
-    )
-    hashed_password: Mapped[Optional[str]] = mapped_column(
-        String(length=USER_HASH_PASS_LEN),
-        comment='хэш пароля',
-    )
     name_first: Mapped[str] = mapped_column(
-        String(length=USER_USERNAME_LEN),
+        String(length=UserParams.NAME_LEN_MAX),
         comment='имя',
     )
     name_last: Mapped[str] = mapped_column(
-        String(length=USER_USERNAME_LEN),
+        String(length=UserParams.NAME_LEN_MAX),
         comment='фамилия',
     )
-    # TODO: сделать поле phonenumber.
+    password_hashed: Mapped[Optional[str]] = mapped_column(
+        String(length=UserParams.PASSWORD_HASHED_LEN_MAX),
+        comment='хэш пароля',
+    )
     phone: Mapped[str] = mapped_column(
-        String(length=USER_PHONE_LEN),
+        String(length=UserParams.PHONE_LEN_MAX),
         comment='номер телефона',
         nullable=True,
         server_default=expression.null(),
@@ -89,10 +99,32 @@ class User(Base):
         comment='Статус подтвержденного номера телефона',
         server_default=expression.false(),
     )
-    registration_datetime: Mapped[datetime] = mapped_column(
+    datetime_registration: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         comment='дата и время регистрации',
         server_default=func.now(),
+    )
+
+    # Foreign keys
+    address_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey(
+            column=f'{TableNames.address}.id',
+            name=f'{TableNames.user}_{TableNames.address}_fkey',
+            ondelete='RESTRICT',
+        ),
+        comment='ID адреса',
+        nullable=True,
+        server_default=expression.null(),
+    )
+    user_salesman_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey(
+            column=f'{TableNames.user_salesman}.id',
+            name=f'{TableNames.user}_{TableNames.user_salesman}_fkey',
+            ondelete='RESTRICT',
+        ),
+        comment='ID продавца',
+        nullable=True,
+        server_default=expression.null(),
     )
 
     # Relationship
@@ -100,23 +132,17 @@ class User(Base):
         'Address',
         back_populates='user',
     )
+    bank_cards: Mapped[list['UserBankCard']] = relationship(
+        'UserBankCard',
+        back_populates='user',
+    )
     products: Mapped[list['Product']] = relationship(
         'Product',
         back_populates='salesman',
     )
     user_salesman: Mapped['UserSalesman'] = relationship(
+        'UserSalesman',
         back_populates='user',
-    )
-
-    # Foreign keys
-    address_id: Mapped[Optional[int]] = mapped_column(
-        ForeignKey(
-            column=f'{table_names.address}.id',
-            ondelete='RESTRICT',
-        ),
-        comment='ID адреса',
-        nullable=True,
-        server_default=expression.null(),
     )
 
     @property
@@ -128,12 +154,12 @@ class User(Base):
         return f'{self.email} ({self.name_first} {self.name_last})'
 
 
-class UserPaymentData(Base):
-    """Декларативная модель представления платежных данных пользователя."""
+class UserBankCard(Base):
+    """Декларативная модель представления банковских карт пользователя."""
 
-    __tablename__ = table_names.user_payment_data
+    __tablename__ = TableNames.user_bank_card
     __tableargs__ = {
-        'comment': 'Пользователи',
+        'comment': 'Банковские карты',
     }
 
     # Primary keys
@@ -144,48 +170,67 @@ class UserPaymentData(Base):
 
     # Columns
     card_number: Mapped[str] = mapped_column(
-        String(length=USER_PAYMENT_DATA_CARD_NUMBER),
-        comment='номер банковской карты',
-    )
-    hashed_cvv: Mapped[Optional[str]] = mapped_column(
-        String(length=USER_HASH_PASS_LEN),
-        comment='хэш CVV',
+        String(length=UserBankCardParams.NUMBER_LEN_MAX),
+        comment='номер',
     )
     expiration_date: Mapped[date] = mapped_column(
         Date(),
-        comment='дата окончания срока действия банковской карты',
-        server_default=func.now(),
+        comment='дата окончания срока действия',
+    )
+    cardholder: Mapped[str] = mapped_column(
+        String(length=UserBankCardParams.CARDHOLDER_LEN_MAX),
+        comment='имя владельца',
+    )
+    is_main: Mapped[bool] = mapped_column(
+        comment='статус основной',
+        server_default=expression.false(),
+    )
+    title: Mapped[str] = mapped_column(
+        String(length=UserBankCardParams.TITLE_LEN_MAX),
+        comment='название',
+    )
+
+    # Foreign keys
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey(
+            column=f'{TableNames.user}.id',
+            name=f'{TableNames.user_bank_card}_{TableNames.user}_fkey',
+            ondelete='CASCADE',
+        ),
+        comment='ID пользователя',
+    )
+
+    # Relationship
+    user: Mapped['User'] = relationship(
+        'User',
+        back_populates='bank_cards',
     )
 
 
 class UserSalesman(Base):
     """Декларативная модель представления продавца."""
 
-    __tablename__ = table_names.user_salesman
+    __tablename__ = TableNames.user_salesman
 
     # Primary keys
-    user_id: Mapped[int] = mapped_column(
-        ForeignKey(
-            column=f'{table_names.user}.id',
-            ondelete='CASCADE',
-        ),
-        comment='ID пользователя-продавца',
+    id: Mapped[int] = mapped_column(
+        comment='ID',
         primary_key=True,
     )
 
     # Fields
     company_name: Mapped[str] = mapped_column(
-        String(length=USER_SALESMAN_COMPANY_NAME_LEN),
+        String(length=CompanyParams.NAME_LEN_MAX),
         comment='название компании',
     )
     description: Mapped[str] = mapped_column(
-        String(length=USER_SALESMAN_COMPANY_DESCRIPTION_LEN),
+        String(length=CompanyParams.DESCRIPTION_LEN_MAX),
         comment='описание компании',
         nullable=True,
         server_default=expression.null(),
     )
     image: Mapped[Optional[str]] = mapped_column(
-        String(length=USER_SALESMAN_COMPANY_IMAGE_LEN),
+        String(length=CompanyParams.IMAGE_LEN_MAX),
         comment='изображение компании',
         nullable=True,
         server_default=expression.null(),
@@ -205,9 +250,6 @@ class UserSalesman(Base):
     user: Mapped['User'] = relationship(
         back_populates='user_salesman',
     )
-
-
-"""SQLAdmin."""
 
 
 class UserAdmin(ModelView, model=User):
@@ -244,7 +286,7 @@ class UserAdmin(ModelView, model=User):
         'name_last',
         'email',
         'phone',
-        'registration_datetime',
+        'datetime_registration',
         'is_active',
         'is_salesman',
     )
@@ -261,9 +303,9 @@ class UserAdmin(ModelView, model=User):
         User.name_last,
         User.email,
         User.phone,
-        User.registration_datetime,
+        User.datetime_registration,
         User.is_active,
-        User.is_salesman,
+        User.user_salesman_id,
     )
 
     # Details page.
@@ -275,7 +317,7 @@ class UserAdmin(ModelView, model=User):
         'email_is_confirmed',
         'phone',
         'phone_is_confirmed',
-        'registration_datetime',
+        'datetime_registration',
         'is_active',
         'is_admin',
         'is_salesman',
@@ -313,21 +355,21 @@ class UserSalesmanAdmin(ModelView, model=UserSalesman):
 
     # List page.
     column_default_sort = [
-        (UserSalesman.user_id, True),
+        (UserSalesman.id, True),
     ]
     column_list = (
-        'user_id',
+        'id',
         'user',
         'company_name',
         'is_verified',
         'rating',
     )
     column_searchable_list = (
-        UserSalesman.user_id,
+        UserSalesman.id,
         UserSalesman.company_name,
     )
     column_sortable_list = (
-        UserSalesman.user_id,
+        UserSalesman.id,
         UserSalesman.company_name,
         UserSalesman.is_verified,
         UserSalesman.rating,
@@ -335,7 +377,7 @@ class UserSalesmanAdmin(ModelView, model=UserSalesman):
 
     # Details page.
     column_details_list = (
-        'user_id',
+        'id',
         'user',
         'company_name',
         'description',
@@ -345,5 +387,5 @@ class UserSalesmanAdmin(ModelView, model=UserSalesman):
     )
 
     # Other.
-    pk_columns = (UserSalesman.user_id,)
+    pk_columns = (UserSalesman.id,)
     is_async = True
