@@ -2,7 +2,10 @@
 
 from celery import Celery
 
-from src.config.config import settings
+from src.config.config import (
+    TimeIntervals,
+    settings,
+)
 
 celery_app: Celery = Celery(
     'tasks',
@@ -21,31 +24,26 @@ celery_app.conf.beat_schedule = {
     'delete_expired_pass_reset_tokens': {
         # Удаляет просроченные токены восстановления пароля.
         'task': 'src.celery_app.auth.tasks.delete_expired_pass_reset_tokens',
-        'schedule': settings.ONE_DAY_SEC,  # INFO: время в секундах.
+        'schedule': TimeIntervals.SECONDS_IN_1_DAY,
     },
     'send_missed_feedbacks_to_email': {
         # Проверяет базу данных и ищет неотправленные обращения.
         'task': 'src.celery_app.feedback.tasks.send_missed_feedbacks_to_email',
-        'schedule': 60 * 5,  # INFO: время в секундах.
+        'schedule': TimeIntervals.SECONDS_IN_5_MINUTES,
     },
 }
 
 
-"""Priority levels."""
+class CeleryPriority:
+    """
+    Класс с приоритетами задач Celery.
+    """
 
-
-PRIOR_NONE: int = 9
-
-PRIOR_VERY_LOW: int = 8
-
-PRIOR_LOW: int = 7
-
-PRIOR_MEDIUM: int = 5
-
-PRIOR_HIGH: int = 3
-
-PRIOR_VERY_HIGH: int = 2
-
-PRIOR_IMPORTANT: int = 1
-
-PRIOR_MOST_IMPORTANT: int = 0
+    NONE: int = 9
+    VERY_LOW: int = 8
+    LOW: int = 7
+    MEDIUM: int = 5
+    HIGH: int = 3
+    VERY_HIGH: int = 2
+    IMPORTANT: int = 1
+    MOST_IMPORTANT: int = 0
