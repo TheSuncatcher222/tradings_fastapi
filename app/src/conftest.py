@@ -31,12 +31,12 @@ from sqlalchemy.pool import NullPool
 #       использования абсолютных путей импорта данных из модулей.
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
-from app.src.config.config import settings
-from app.src.database.database import (
+from src.config.config import settings
+from src.database.database import (
     Base,
     get_async_session,
 )
-from app.src.main import app
+from src.main import app
 
 POSTGRES_DB: str = f'test_{settings.POSTGRES_DB}'
 TEST_DATABASE_ASYNC_URL: str = f'postgresql+asyncpg://{settings.POSTGRES_USER}:{settings.POSTGRES_PASSWORD}@{settings.DB_HOST}:{settings.DB_PORT}/{POSTGRES_DB}'
@@ -125,7 +125,7 @@ async def truncate_test_db(test_async_session: AsyncSession) -> AsyncGenerator[N
 async def test_api_client() -> AsyncGenerator[AsyncClient, None]:
     """Создает тестовый API клиент."""
     async with AsyncClient(
-        base_url='http://localhost:8001/api/v1/',
+        base_url='http://localhost:8000/api/v1/',
         transport=ASGITransport(app=app),
     ) as test_client:
         yield test_client
