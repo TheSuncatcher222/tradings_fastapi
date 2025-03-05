@@ -96,7 +96,7 @@ admin = Admin(
     app=app,
     engine=async_engine,
     authentication_backend=authentication_backend,
-    base_url=f'/{settings.ADMIN_URL}/',
+    base_url=f'/{settings.ADMIN_URL_PREFIX}/',
 )
 for admin_view in admin_views:
     admin.add_view(admin_view)
