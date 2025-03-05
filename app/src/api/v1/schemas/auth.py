@@ -2,61 +2,52 @@
 Модуль со схемами валидации данных через Pydantic в приложении "auth".
 """
 
-from pydantic import BaseModel, EmailStr, validator
+from pydantic import (
+    BaseModel,
+    EmailStr,
+    ValidationInfo,
+    field_validator,
+)
 
-from src.validators.user import PASS_CHARS_VALIDATORS
+from src.validators.user import (
+    validate_user_email,
+    validate_user_new_password,
+    validate_user_new_password_confirm,
+    validate_user_password,
+)
 
 
-class AuthLogin(BaseModel):
+class AuthLoginSchema(BaseModel):
     """Схема представления данных для авторизации пользователя."""
 
     email: str
     password: str
 
-    @validator('email')
+    @field_validator('email')
     def validate_email(cls, value: str) -> str:
         """Переводит символы поля email в нижний регистр."""
-        return value.lower()
+        return validate_user_email(value=value)
 
 
-class AuthPasswordChange(BaseModel):
+class AuthPasswordChangeSchema(BaseModel):
     """Схема представления данных для смены текущего пароля пользователя."""
 
     password: str
     new_password: str
     new_password_confirm: str
 
-    @validator('new_password')
-    def validate_new_password(cls, value: str, values: dict) -> str:
+    @field_validator('new_password')
+    def validate_new_password(cls, value: str, info: ValidationInfo) -> str:
         """Производит валидацию поля 'new_password'."""
-        if value == values.get('password'):
-            raise ValueError(
-                'Прежний и новый пароли должны отличаться'
-            )
-        errors: list[str] = [
-            err_message
-            for condition, err_message
-            in PASS_CHARS_VALIDATORS.items()
-            if not condition(value)
-        ]
-        if len(errors) > 0:
-            raise ValueError(
-                'Введите пароль, который удовлетворяет критериям:' +
-                ''.join(errors)
-            )
-        return value
+        return validate_user_new_password(value=value, current_password=info.data.get('password'))
 
-    @validator('new_password_confirm')
-    def validate_new_password_confirm(cls, value: str, values: dict) -> str:
+    @field_validator('new_password_confirm')
+    def validate_new_password_confirm(cls, value: str, info: ValidationInfo) -> str:
         """Производит валидацию поля 'new_password_confirm'."""
-        if value != values.get('new_password'):
-            raise ValueError(
-                'Пароли не совпадают'
-            )
-        return value
+        return validate_user_new_password_confirm(value=value, new_password=info.data.get('new_password'))
 
 
-class AuthPasswordReset(BaseModel):
+class AuthPasswordResetSchema(BaseModel):
     """
     Схема представления данных для первого этапа
     восстановления пароля: отправка сообщения на почту.
@@ -64,17 +55,17 @@ class AuthPasswordReset(BaseModel):
 
     email: EmailStr
 
-    @validator('email')
+    @field_validator('email')
     def validate_email(cls, value: str) -> str:
         """
         Переводит символы поля email в нижний регистр.
 
         Валидация структуры email осуществляется автоматически в Pydantic.
         """
-        return value.lower()
+        return validate_user_email(value=value)
 
 
-class AuthPasswordResetConfirm(BaseModel):
+class AuthPasswordResetConfirmSchema(BaseModel):
     """
     Схема представления данных для второго этапа
     восстановления пароля: смена пароля пользователя.
@@ -84,37 +75,18 @@ class AuthPasswordResetConfirm(BaseModel):
     new_password: str
     new_password_confirm: str
 
-    @validator('new_password')
-    def validate_new_password(cls, value: str, values: dict) -> str:
+    @field_validator('new_password')
+    def validate_new_password(cls, value: str) -> str:
         """Производит валидацию поля 'new_password'."""
-        if value == values.get('password'):
-            raise ValueError(
-                'Прежний и новый пароли должны отличаться'
-            )
-        errors: list[str] = [
-            err_message
-            for condition, err_message
-            in PASS_CHARS_VALIDATORS.items()
-            if not condition(value)
-        ]
-        if len(errors) > 0:
-            raise ValueError(
-                'Введите пароль, который удовлетворяет критериям:' +
-                ''.join(errors)
-            )
-        return value
+        return validate_user_password(value=value)
 
-    @validator('new_password_confirm')
-    def validate_new_password_confirm(cls, value: str, values: dict) -> str:
+    @field_validator('new_password_confirm')
+    def validate_new_password_confirm(cls, value: str, info: ValidationInfo) -> str:
         """Производит валидацию поля 'new_password_confirm'."""
-        if value != values.get('new_password'):
-            raise ValueError(
-                'Пароли не совпадают'
-            )
-        return value
+        return validate_user_new_password_confirm(value=value, new_password=info.data.get('new_password'))
 
 
-class JwtTokenAccess(BaseModel):
+class JwtTokenAccessRepresentSchema(BaseModel):
     """Схема представления JWT токена доступа."""
 
     access: str
