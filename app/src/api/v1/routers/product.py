@@ -2,13 +2,22 @@
 Модуль с эндпоинтами приложения "product".
 """
 
-from fastapi import APIRouter, Depends
+from fastapi import (
+    APIRouter,
+    Depends,
+)
 
 from src.api.v1.crud.product import product_v1_crud
-from src.api.v1.schemas.product import ProductCreateSchema, ProductRepresentSchema
-from src.database.database import AsyncSession, get_async_session
+from src.api.v1.schemas.product import (
+    ProductCreateSchema,
+    ProductRepresentSchema,
+)
+from src.database.database import (
+    AsyncSession,
+    get_async_session,
+)
 from src.models.user import User
-from src.utils.auth import get_current_user
+from src.utils.auth import get_user
 
 router_product: APIRouter = APIRouter(
     prefix='/products',
@@ -22,7 +31,7 @@ router_product: APIRouter = APIRouter(
 )
 async def product_create(
     product_data: ProductCreateSchema,
-    user: User = Depends(get_current_user),
+    user: User = Depends(get_user),
     session: AsyncSession = Depends(get_async_session),
 ):
     """Регистрирует новый продукт."""
