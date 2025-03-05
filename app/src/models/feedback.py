@@ -1,25 +1,35 @@
-# """
-# Модуль с ORM моделями базы данных приложения "feedback".
-# """
+"""
+Модуль с ORM моделями базы данных приложения "feedback".
+"""
 
 from datetime import datetime
 
 from sqladmin import ModelView
-from sqlalchemy import DateTime, String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import (
+    ARRAY,
+    DateTime,
+    String,
+)
+from sqlalchemy.orm import (
+    Mapped,
+    mapped_column,
+)
 from sqlalchemy.sql import func
 
-from src.database.database import Base, table_names
-from src.validators.feedback import FEEDBACK_CONTACTS_LEN, FEEDBACK_MESSAGE_LEN
-from src.validators.user import USER_EMAIL_LEN, USER_USERNAME_LEN
+from src.database.database import (
+    Base,
+    TableNames,
+)
+from src.validators.feedback import FeedbackParams
+from src.validators.user import UserParams
 
 
 class Feedback(Base):
     """Декларативная модель представления формы обратной связи пользователей."""
 
-    __tablename__ = table_names.feedback
+    __tablename__ = TableNames.feedback
     __tableargs__ = {
-        'comment': 'Форма обратной связи пользователей'
+        'comment': 'Форма обратной связи пользователей',
     }
 
     # Primary Keys
@@ -29,37 +39,31 @@ class Feedback(Base):
     )
 
     # Columns
+    attachments: Mapped[str] = mapped_column(
+        ARRAY(String(length=FeedbackParams.FILE_LEN_MAX)),
+        comment='данные прикрепленных файлов',
+    )
     contacts: Mapped[str] = mapped_column(
-        String(length=FEEDBACK_CONTACTS_LEN),
+        String(length=FeedbackParams.CONTACTS_LEN_MAX),
         comment='телефон или телеграм',
     )
-    created_datetime: Mapped[datetime] = mapped_column(
+    datetime_created: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         comment='дата и время отправки',
         server_default=func.now(),
     )
-    data_process_approve: Mapped[bool] = mapped_column(
-        comment='согласие на обработку персональных данных',
-    )
     email: Mapped[str] = mapped_column(
-        String(length=USER_EMAIL_LEN),
+        String(length=UserParams.EMAIL_LEN_MAX),
         comment='email',
     )
-    is_accepted: Mapped[bool] = mapped_column(
-        comment='статус отправки в поддержку',
-        default=False,
-    )
     message: Mapped[str] = mapped_column(
-        String(length=FEEDBACK_MESSAGE_LEN),
+        String(length=FeedbackParams.MESSAGE_LEN_MAX),
         comment='сообщение',
     )
     username: Mapped[str] = mapped_column(
-        String(length=USER_USERNAME_LEN),
+        String(length=UserParams.EMAIL_LEN_MAX),
         comment='имя',
     )
-
-
-"""SQLAdmin."""
 
 
 class FeedbackAdmin(ModelView, model=Feedback):
@@ -92,37 +96,34 @@ class FeedbackAdmin(ModelView, model=Feedback):
     ]
     column_list = (
         'id',
-        'username',
+        'datetime_created',
         'email',
         'contacts',
-        'is_accepted',
-        'created_datetime',
+        'username',
     )
     column_searchable_list = (
         Feedback.id,
-        Feedback.username,
+        Feedback.datetime_created,
         Feedback.email,
         Feedback.contacts,
-        Feedback.created_datetime,
+        Feedback.username,
     )
     column_sortable_list = (
         Feedback.id,
-        Feedback.username,
+        Feedback.datetime_created,
         Feedback.email,
         Feedback.contacts,
-        Feedback.is_accepted,
-        Feedback.created_datetime,
+        Feedback.username,
     )
 
     # Details page.
     column_details_list = (
         'id',
-        'username',
+        'datetime_created',
         'email',
         'contacts',
-        'is_accepted',
-        'created_datetime',
-        'data_process_approve',
+        'username',
+        'attachments',
         'message',
     )
 
