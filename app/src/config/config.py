@@ -66,6 +66,13 @@ class Settings(BaseSettings):
     REDIS_DB_CACHE: int
     REDIS_DB_CACHE_FASTAPI: int
 
+    """Настройки брокера сообщений RabbitMQ."""
+    RABBITMQ_HOST: str
+    RABBITMQ_PORT: int
+    RABBITMQ_USER: str
+    RABBITMQ_PASSWORD: str
+    RABBITMQ_VHOST: str
+
     """Настройки SQLAlchemy Admin."""
     ADMIN_USERNAME: str
     ADMIN_PASSWORD: str
