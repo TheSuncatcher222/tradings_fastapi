@@ -33,6 +33,9 @@ sqlalchemy~=2.0                     # ORM.
 pydantic[email]~=2.10               # Для валидации данных.
 pydantic-settings~=2.8              # Для загрузки переменных окружения из .env файлов.
 
+# RabbitMQ.
+aio-pika~=9.5                       # Для работы с RabbitMQ в асинхронном режиме.
+
 # Security.
 itsdangerous~=2.2                   # Для (де)шифрования данных.
 python-jose[cryptography]~=3.3      # Для работы с JWT токенами.
