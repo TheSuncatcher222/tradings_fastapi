@@ -37,6 +37,11 @@ services:
       - ../app/src/config/.env
     expose:
       - 5432
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     hostname: tradings-postgresql-host
     image: postgres:15-alpine3.18
     logging:
@@ -62,6 +67,22 @@ services:
     volumes:
       - tradings_pg_admin_volume:/var/lib/pgadmin
 
+  rabbitmq:
+    container_name: tradings_rabbitmq
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    hostname: tradings-rabbitmq-host
+    image: rabbitmq:3.9-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: on-failure
+
   backend:
     build:
       context: ../app
@@ -74,8 +95,12 @@ services:
       celery -A src.celery_app.celery_app:celery_app flower --basic_auth=${CELERY_FLOWER_ADMIN_USERNAME}:${CELERY_FLOWER_ADMIN_PASSWORD} --loglevel=INFO"
     container_name: tradings_backend
     depends_on:
-      - redis
-      - postgresql
+      redis:
+        condition: service_healthy
+      postgresql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     env_file:
       - ../app/src/config/.env
     hostname: tradings-backend-host
