@@ -108,6 +108,11 @@ LoggerJsonFeedback: Logger = LoggerJson(
     log_min_level=LOG_LEVEL_DEFAULT,
 ).logger
 
+LoggerJsonRabbitMQ: Logger = LoggerJson(
+    logger_name='RabbitMQ',
+    log_min_level=LOG_LEVEL_DEFAULT,
+).logger
+
 LoggerJsonUser: Logger = LoggerJson(
     logger_name='User',
     log_min_level=LOG_LEVEL_DEFAULT,
