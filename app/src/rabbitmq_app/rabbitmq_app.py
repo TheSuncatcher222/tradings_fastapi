@@ -59,9 +59,8 @@ class RabbitMQApp:
     async def send_message(self, data: dict, queues: list[str]):
         await self.__validate_outcome_message(data=data)
         for queue_name in queues:
-            await self.__channel.declare_queue(queue_name, durable=True)
             await self.__channel.default_exchange.publish(
-                aio_pika.Message(body=json.dumps(data).encode()),
+                message=aio_pika.Message(body=json.dumps(data).encode()),
                 routing_key=queue_name,
             )
 
